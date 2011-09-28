@@ -137,7 +137,7 @@ class Viewer
     {
         string name = "cloud1";
         clouds[name] = loadPCD("test_pcd1.pcd");
-        viewer->addPointCloud(clouds[name],name,viewports[0]);
+        //viewer->addPointCloud(clouds[name],name,viewports[0]);
         
         name = "cloud2";
         clouds[name] = loadPCD("test_pcd2.pcd");
@@ -237,12 +237,12 @@ class Viewer
         icp.setInputTarget(cloudOut);
         
         
-        PointCloud<PointXYZ> final;
+        PointCloud<PointXYZ>::Ptr final (new PointCloud<PointXYZ>);
         icp.setMaximumIterations(1000);
 
-        icp.align(final);
+        icp.align(*final);
         
-        
+        viewer->addPointCloud(final,"final",viewports[0]);  
         
         //cout << "2" << endl;
         //std::cout << "has converged:" << endl << icp.hasConverged() << endl << " score: " << endl << icp.getFitnessScore() << std::endl;
@@ -252,7 +252,7 @@ class Viewer
         viewer->addPointCloud(point_cloud_ptr,"icp",viewports[3]);  
                 */
         cout << "has converged:" << endl << icp.hasConverged() << endl << " score: " << endl << icp.getFitnessScore() << std::endl;
-
+        
         Matriz<double> matriz(4,4);
         Eigen::Matrix4f* aux = new Eigen::Matrix4f(icp.getFinalTransformation());
 

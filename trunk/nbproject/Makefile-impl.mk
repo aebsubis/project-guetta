@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=Viewer
+PROJECTNAME=project-guetta
 
 # Active Configuration
 DEFAULTCONF=Debug
