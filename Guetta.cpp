@@ -134,13 +134,14 @@ void Guetta::procesarClouds()
     // Cargamos todos los clouds del directorio
     loadClouds(widget.lineEdit_directorio->text().toStdString());
     
-
     string prefijo = widget.lineEdit_directorio->text().toStdString() + "/";
     GuettaCloud* cloud1 = new GuettaCloud(pclClouds[prefijo+"cloud0"]);
     GuettaCloud* cloud2 = new GuettaCloud(pclClouds[prefijo+"cloud1"]);
     GuettaCloud* features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[prefijo+"cloud0"],prefijo+"cloud0",RGB(1,0,0));
     GuettaCloud* features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[prefijo+"cloud1"],prefijo+"cloud1",RGB(0,1,0));
     GuettaCloud* resultado = emparejar(cloud1,cloud2,features1,features2);
+    
+    //for(int i = 2; i < clou
     
 }
 
