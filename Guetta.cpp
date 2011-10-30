@@ -55,6 +55,7 @@ Guetta::Guetta() {
 
     widget.gridLayout_2->addWidget(viewers[4],0,0);
     
+    widget.gridLayout_3->addWidget(new GuettaCapture());
     
     cloud1 = "cloud2";
     cloud2 = "cloud1";
@@ -139,7 +140,7 @@ void Guetta::procesarClouds()
     GuettaCloud* cloud2 = new GuettaCloud(pclClouds[prefijo+"cloud1"]);
     GuettaCloud* features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[prefijo+"cloud0"],prefijo+"cloud0",RGB(1,0,0));
     GuettaCloud* features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[prefijo+"cloud1"],prefijo+"cloud1",RGB(0,1,0));
-    emparejar(cloud1,cloud2,features1,features2);
+    GuettaCloud* resultado = emparejar(cloud1,cloud2,features1,features2);
     
 }
 
@@ -173,9 +174,11 @@ GuettaCloud* Guetta::emparejar(GuettaCloud* cloud1, GuettaCloud* cloud2, GuettaC
     PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
     transformPointCloud (*cloud2->pointCloud, *cloudTransformed, transformation_matrix);  
     
-    //viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloud1->pointCloud); 
-    //viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),new GuettaCloud(cloudTransformed));
+    resultado = new GuettaCloud(cloudTransformed);
+    viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),new GuettaCloud(cloud1->pointCloud)); 
+    viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),resultado);
         
+    return resultado;
    // PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
    // transformPointCloud (*pclClouds[cloud2], *cloudTransformed, transformation_matrix);    
         
