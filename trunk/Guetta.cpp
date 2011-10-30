@@ -171,7 +171,10 @@ GuettaCloud* Guetta::emparejar(GuettaCloud* cloud1, GuettaCloud* cloud2, GuettaC
     //viewers[4]->selectables.insert(viewers[4]->selectables.end(),guettaCloud1);  
 
     PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
-    //transformPointCloud (*pclClouds[cloud2], *cloudTransformed, transformation_matrix);    
+    transformPointCloud (*cloud2->pointCloud, *cloudTransformed, transformation_matrix);  
+    
+    //viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloud1->pointCloud); 
+    //viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),new GuettaCloud(cloudTransformed));
         
    // PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
    // transformPointCloud (*pclClouds[cloud2], *cloudTransformed, transformation_matrix);    
