@@ -1,1 +1,0 @@
-/home/daniel/NetBeansProjects/Prueba/CMakeFiles/ProjectGuetta.dir
