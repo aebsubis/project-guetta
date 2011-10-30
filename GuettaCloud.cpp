@@ -30,6 +30,7 @@ GuettaCloud::GuettaCloud(PointCloud<PointXYZRGB>::Ptr cloud)
         PointXYZRGB point = cloud->points[i];
         data[i] = new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b,NULL);
     }
+    pointCloud = cloud;
 }
 
 PointCloud<PointXYZRGB>::Ptr GuettaCloud::getPointCloud()

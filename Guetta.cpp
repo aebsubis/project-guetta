@@ -167,10 +167,12 @@ GuettaCloud* Guetta::emparejar(GuettaCloud* cloud1, GuettaCloud* cloud2, GuettaC
     Eigen::Matrix4f transformation_matrix;
     GuettaCloud* resultado = new GuettaCloud();
     float distancia = ramsac.getDistanciaTotal(guettaCloud2, ramsac.mejorCombinacion, guettaCloud1, ramsac.mejorCombinacion, resultado, transformation_matrix);
-    viewers[4]->selectables.insert(viewers[4]->selectables.end(),resultado);
-    viewers[4]->selectables.insert(viewers[4]->selectables.end(),guettaCloud1);  
+    //viewers[4]->selectables.insert(viewers[4]->selectables.end(),resultado);
+    //viewers[4]->selectables.insert(viewers[4]->selectables.end(),guettaCloud1);  
 
-
+    PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
+    //transformPointCloud (*pclClouds[cloud2], *cloudTransformed, transformation_matrix);    
+        
    // PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
    // transformPointCloud (*pclClouds[cloud2], *cloudTransformed, transformation_matrix);    
         

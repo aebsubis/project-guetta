@@ -27,6 +27,7 @@ class GuettaCloud
         PointCloud<PointXYZRGB>::Ptr getPointCloud();
         vector<GuettaKeyPoint*> data;
         string id;
+        PointCloud<PointXYZRGB>::Ptr pointCloud;
 };
 
 
