@@ -32,7 +32,7 @@ include_directories("./siftgpu/src/")
 include_directories("/usr/include/QGLViewer")
 include_directories("/usr/include/qt4/QtXml")
 link_directories(${PCL_LIBRARY_DIRS})
-link_directories("~/NetBeansProjects/GuettaICP/siftgpu")
+link_directories("./siftgpu")
 link_directories("/usr/local/lib")
 
 LINK_DIRECTORIES( ${QT_LIBRARY_DIR} )
