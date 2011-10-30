@@ -6,9 +6,9 @@ project(proyecto)
 find_package(PCL 1.1 REQUIRED)
 FIND_PACKAGE(Qt4 REQUIRED)
 
-SET(proyecto_SOURCES main.cpp Guetta.cpp GuettaViewer.cpp GLWidget.cpp Viewer.cpp StandardCamera.cpp GuettaFeatures.cpp GuettaCloud.cpp SiftGPUFeatureDetector.cpp GuettaICP.cpp GuettaTime.cpp Ramsac.cpp)
-SET(proyecto_HEADERS Guetta.h GuettaViewer.h GLWidget.h Viewer.h)
-SET(proyecto_FORMS Guetta.ui GuettaViewer.ui)
+SET(proyecto_SOURCES main.cpp Guetta.cpp GLWidget.cpp Viewer.cpp StandardCamera.cpp GuettaFeatures.cpp GuettaCloud.cpp SiftGPUFeatureDetector.cpp GuettaICP.cpp GuettaTime.cpp Ramsac.cpp GuettaCapture.cpp)
+SET(proyecto_HEADERS Guetta.h GLWidget.h Viewer.h GuettaCapture.h)
+SET(proyecto_FORMS Guetta.ui GuettaCapture.ui)
 
 SET(QT_USE_QTOPENGL TRUE)
 set(QT_USE_XML TRUE)

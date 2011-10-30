@@ -9,7 +9,6 @@
 #define	_GUETTA_H
 
 #include "ui_Guetta.h"
-#include "GuettaViewer.h"
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
@@ -26,6 +25,7 @@
 #include "pcl/sample_consensus/ransac.h"
 #include "pcl/sample_consensus/sac_model_registration.h"
 #include "GuettaICP.h"
+#include "GuettaCapture.h"
 using namespace std;
 using namespace pcl;
 using namespace pcl::io;

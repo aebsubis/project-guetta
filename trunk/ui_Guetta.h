@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Guetta.ui'
 **
-** Created: Sun Oct 30 19:09:35 2011
+** Created: Sun Oct 30 19:40:58 2011
 **      by: Qt User Interface Compiler version 4.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -72,6 +72,9 @@ public:
     QPushButton *pushButton_procesar;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
+    QWidget *tab_5;
+    QWidget *gridLayoutWidget_3;
+    QGridLayout *gridLayout_3;
 
     void setupUi(QDialog *Guetta)
     {
@@ -199,10 +202,19 @@ public:
         gridLayout_2->setSizeConstraint(QLayout::SetMaximumSize);
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
         tabWidget->addTab(tab_2, QString());
+        tab_5 = new QWidget();
+        tab_5->setObjectName(QString::fromUtf8("tab_5"));
+        gridLayoutWidget_3 = new QWidget(tab_5);
+        gridLayoutWidget_3->setObjectName(QString::fromUtf8("gridLayoutWidget_3"));
+        gridLayoutWidget_3->setGeometry(QRect(70, 30, 591, 461));
+        gridLayout_3 = new QGridLayout(gridLayoutWidget_3);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        gridLayout_3->setContentsMargins(0, 0, 0, 0);
+        tabWidget->addTab(tab_5, QString());
 
         retranslateUi(Guetta);
 
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(2);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -235,6 +247,7 @@ public:
         pushButton_seleccionarDirectorio->setText(QApplication::translate("Guetta", "Seleccionar", 0, QApplication::UnicodeUTF8));
         pushButton_procesar->setText(QApplication::translate("Guetta", "Procesar", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Guetta", "Tab 2", 0, QApplication::UnicodeUTF8));
+        tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("Guetta", "Page", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

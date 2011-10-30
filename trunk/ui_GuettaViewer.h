@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'GuettaViewer.ui'
 **
-** Created: Sun Oct 30 19:09:34 2011
+** Created: Sun Oct 30 19:30:17 2011
 **      by: Qt User Interface Compiler version 4.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -21,40 +21,40 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_GuettaViewer
+class Ui_GuettaCapture
 {
 public:
     QPushButton *pushButton;
     QToolButton *toolButton;
 
-    void setupUi(QWidget *GuettaViewer)
+    void setupUi(QWidget *GuettaCapture)
     {
-        if (GuettaViewer->objectName().isEmpty())
-            GuettaViewer->setObjectName(QString::fromUtf8("GuettaViewer"));
-        GuettaViewer->resize(341, 216);
-        pushButton = new QPushButton(GuettaViewer);
+        if (GuettaCapture->objectName().isEmpty())
+            GuettaCapture->setObjectName(QString::fromUtf8("GuettaCapture"));
+        GuettaCapture->resize(341, 216);
+        pushButton = new QPushButton(GuettaCapture);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
         pushButton->setGeometry(QRect(20, 20, 97, 27));
-        toolButton = new QToolButton(GuettaViewer);
+        toolButton = new QToolButton(GuettaCapture);
         toolButton->setObjectName(QString::fromUtf8("toolButton"));
         toolButton->setGeometry(QRect(50, 90, 24, 25));
 
-        retranslateUi(GuettaViewer);
+        retranslateUi(GuettaCapture);
 
-        QMetaObject::connectSlotsByName(GuettaViewer);
+        QMetaObject::connectSlotsByName(GuettaCapture);
     } // setupUi
 
-    void retranslateUi(QWidget *GuettaViewer)
+    void retranslateUi(QWidget *GuettaCapture)
     {
-        GuettaViewer->setWindowTitle(QApplication::translate("GuettaViewer", "GuettaViewer", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("GuettaViewer", "PushButton", 0, QApplication::UnicodeUTF8));
-        toolButton->setText(QApplication::translate("GuettaViewer", "...", 0, QApplication::UnicodeUTF8));
+        GuettaCapture->setWindowTitle(QApplication::translate("GuettaCapture", "GuettaViewer", 0, QApplication::UnicodeUTF8));
+        pushButton->setText(QApplication::translate("GuettaCapture", "PushButton", 0, QApplication::UnicodeUTF8));
+        toolButton->setText(QApplication::translate("GuettaCapture", "...", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class GuettaViewer: public Ui_GuettaViewer {};
+    class GuettaCapture: public Ui_GuettaCapture {};
 } // namespace Ui
 
 QT_END_NAMESPACE
