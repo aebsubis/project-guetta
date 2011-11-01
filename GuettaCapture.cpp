@@ -4,6 +4,7 @@
  *
  * Created on 11 de octubre de 2011, 11:43
  */
+#include <boost/thread.hpp>
 
 #include "GuettaCapture.h"
 
@@ -29,7 +30,7 @@ GuettaCapture::GuettaCapture()
     widget.capturedViewer->addWidget(viewers[1],0,0);
     
     //cout << viewers[0]->unselectables.size() << endl;
-    //viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), new GuettaCloud());
+    viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), new GuettaCloud());
     //cout << viewers[0]->unselectables.size() << endl;
     
     PointCloud<PointXYZRGB>::Ptr aux_rt_cloud (new PointCloud<PointXYZRGB>);
@@ -46,18 +47,27 @@ void GuettaCapture::connectOpenNIGrabber(){
      widget.labelNoInputDeviceConnected->setEnabled(false);
      function<void (const PointCloud<PointXYZRGB>::ConstPtr&)> f = bind (&GuettaCapture::cloud_cb_, this, _1);
      function<void (const boost::shared_ptr<openni_wrapper::Image>&)> f2 = bind (&GuettaCapture::cloud2_cb_, this, _1);
-
+     
      interface->registerCallback(f);
      interface->registerCallback(f2);
-
+     
      interface->start();
-   
-    //while (true)
-    //{
-    //    sleep (1);
-    //}
-
+     
+     boost::thread thread(&GuettaCapture::render_thread, this);
+//     boost::thread* thr = new boost::thread(boost::bind(&GuettaCapture::render, this));
     //interface->stop();
+}
+
+void GuettaCapture::render_thread() {
+    while (true)
+    {
+        this_thread::sleep(posix_time::milliseconds(1000));
+        mutex::scoped_lock lock (mtx_);
+        cout << "Inicio render" << endl;
+        this_thread::sleep(posix_time::milliseconds(1000));
+        //viewers[0]->updateGL();
+        cout << "Finalizo render" << endl;
+    }
 }
 
 void GuettaCapture::renameCapture() {
@@ -79,6 +89,24 @@ void GuettaCapture::capture() {
 
 void GuettaCapture::cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr &cloud)
 {
+    mutex::scoped_lock lock (mtx_);
+    cout << "Inicio captura" << endl;
+    //delete viewers[0]->unselectables[0];
+    cout << "a" << endl;
+    //viewers[0]->unselectables.clear();
+    copyPointCloud(*cloud, *rt_cloud);
+    cout << "a" << endl;
+    GuettaCloud* gt_cloud = new GuettaCloud(rt_cloud);
+    cout << "a" << endl;
+    //viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), gt_cloud);
+    viewers[0]->unselectables[0] = gt_cloud;
+    cout << "a" << endl;
+    if (guardarXYZ) {
+       string RGBfilename = widget.lineEditCaptureName->text().toStdString() + ".pcd";
+       pcl::io::savePCDFileASCII (RGBfilename, *cloud);
+       guardarXYZ = false;
+    }
+    cout << "Finalizo capatura" << endl;
     /*
     this_thread::sleep(posix_time::milliseconds(1));
     fps++;
@@ -87,30 +115,11 @@ void GuettaCapture::cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr &cloud)
         fps = 0;
         timer.restart();
     }
-    cout << "a" << endl;
-    //cout << "size: " << viewers[0]->unselectables[0].data.size() << endl;
-    delete viewers[0]->unselectables[0];
-    viewers[0]->unselectables.clear();
-    cout << "b" << endl;
-    copyPointCloud(*cloud, *rt_cloud);
-    cout << "c" << endl;
-    GuettaCloud* gt_cloud = new GuettaCloud(rt_cloud);
-    cout << "d" << endl;
-    viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), gt_cloud);
-   // viewers[0]->unselectables[0] = gt_cloud;
-    cout << "e" << endl;
-    viewers[0]->updateGL();
-    cout << "f" << endl;
-    if (guardarXYZ) {
-       string RGBfilename = widget.lineEditCaptureName->text().toStdString() + ".pcd";
-       pcl::io::savePCDFileASCII (RGBfilename, *cloud);
-       guardarXYZ = false;
-    }*/
-    viewers[0]->updateGL();
+    */
 }
 
 void GuettaCapture::cloud2_cb_ (const boost::shared_ptr<openni_wrapper::Image>& data)
-{
+{       
     if (guardarRGB)
     {
         cv::Mat frameRGB=cv::Mat(data->getHeight(),data->getWidth(),CV_8UC3);
