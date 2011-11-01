@@ -9,7 +9,7 @@
 
 Guetta::Guetta() {
     widget.setupUi(this);
-    
+ 
     // Creamos los visualizadores
     viewers.resize(5);
     for(int i = 0; i < 5; i++)
