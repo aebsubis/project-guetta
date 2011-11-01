@@ -37,6 +37,7 @@ class Guetta : public QDialog
             Guetta();
             virtual ~Guetta();
             void loadClouds();
+            
             void loadClouds(string directorio);
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr loadPCD(string name);
             float getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGuettaCloud1,GuettaCloud* guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado);

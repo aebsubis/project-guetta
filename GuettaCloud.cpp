@@ -61,7 +61,7 @@ PointCloud<PointXYZRGB>::Ptr GuettaCloud::getPointCloud()
 GuettaCloud& GuettaCloud::operator=(const GuettaCloud& guettaCloud)
 {
     if(this != &guettaCloud)
-    {
+    { 
         for(int i = 0; i < data.size(); i++)
         {
             this->data.resize(guettaCloud.data.size());

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Guetta.ui'
 **
-** Created: Tue Nov 1 14:58:30 2011
+** Created: Sun Oct 30 20:29:59 2011
 **      by: Qt User Interface Compiler version 4.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -246,7 +246,7 @@ public:
         tab_5->setObjectName(QString::fromUtf8("tab_5"));
         gridLayoutWidget_3 = new QWidget(tab_5);
         gridLayoutWidget_3->setObjectName(QString::fromUtf8("gridLayoutWidget_3"));
-        gridLayoutWidget_3->setGeometry(QRect(70, 30, 591, 461));
+        gridLayoutWidget_3->setGeometry(QRect(0, 0, 1411, 561));
         gridLayout_3 = new QGridLayout(gridLayoutWidget_3);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         gridLayout_3->setContentsMargins(0, 0, 0, 0);
