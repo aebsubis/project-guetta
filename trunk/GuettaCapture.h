@@ -27,42 +27,6 @@
 #include "GuettaICP.h"
 #include <boost/timer.hpp>
 
-/*
-#include "ui_GuettaCapture.h"
-#include <iostream>
-
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/timer.hpp>
-
-#include "pcl/console/parse.h"
-#include "pcl/common/time.h"
-#include "pcl/common/common_headers.h"
-
-#include "pcl/features/normal_3d.h"
-#include "pcl/features/range_image_border_extractor.h"
-
-#include "pcl/filters/passthrough.h"
-
-#include "pcl/io/openni_grabber.h"
-#include "pcl/io/pcd_io.h"
-
-#include "pcl/impl/point_types.hpp"
-
-#include "pcl/keypoints/narf_keypoint.h"
-
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-
-#include "pcl/registration/icp.h"
-#include "pcl/range_image/range_image.h"
-
-#include "pcl/visualization/range_image_visualizer.h"
-#include <pcl/registration/icp_nl.h>
-#include <opencv/cv.h>
-#include "opencv2/highgui/highgui.hpp"
-#include "Viewer.h"
-*/
 using namespace std;
 using namespace pcl;
 using namespace pcl::io;
@@ -80,6 +44,7 @@ class GuettaCapture : public QDialog {
             void renameCapture();
             void capture();
         private:
+            void render_thread();
             void cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr&);
             void cloud2_cb_ (const boost::shared_ptr<openni_wrapper::Image>&);
             Ui::GuettaCapture widget;
@@ -87,8 +52,10 @@ class GuettaCapture : public QDialog {
             bool guardarXYZ;
             bool guardarRGB;
             PointCloud<PointXYZRGB>::Ptr rt_cloud;
-            boost::timer timer;
+            GuettaTime timer;
+            GuettaTime timer2;
             int fps;
+            mutex mtx_;
 };
 
 #endif	/* _GUETTAVIEWER_H */

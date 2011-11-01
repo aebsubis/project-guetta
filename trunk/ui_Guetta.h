@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Guetta.ui'
 **
-** Created: Tue Nov 1 18:40:59 2011
+** Created: Tue Nov 1 16:40:30 2011
 **      by: Qt User Interface Compiler version 4.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -81,7 +81,7 @@ public:
     QPushButton *pushButton_allselect;
     QPushButton *pushButton_allunselect;
     QSpinBox *spinBox_incremento;
-    QCheckBox *checkBox_showKeypoints;
+    QCheckBox *checkBox;
     QWidget *tab_5;
     QWidget *gridLayoutWidget_3;
     QGridLayout *gridLayout_3;
@@ -242,9 +242,9 @@ public:
         spinBox_incremento->setObjectName(QString::fromUtf8("spinBox_incremento"));
         spinBox_incremento->setGeometry(QRect(1080, 160, 59, 27));
         spinBox_incremento->setValue(2);
-        checkBox_showKeypoints = new QCheckBox(tab_2);
-        checkBox_showKeypoints->setObjectName(QString::fromUtf8("checkBox_showKeypoints"));
-        checkBox_showKeypoints->setGeometry(QRect(30, 580, 161, 22));
+        checkBox = new QCheckBox(tab_2);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+        checkBox->setGeometry(QRect(30, 580, 161, 22));
         tabWidget->addTab(tab_2, QString());
         tab_5 = new QWidget();
         tab_5->setObjectName(QString::fromUtf8("tab_5"));
@@ -300,7 +300,7 @@ public:
         ___qtablewidgetitem1->setText(QApplication::translate("Guetta", "Nombre", 0, QApplication::UnicodeUTF8));
         pushButton_allselect->setText(QApplication::translate("Guetta", "Seleccionar todos", 0, QApplication::UnicodeUTF8));
         pushButton_allunselect->setText(QApplication::translate("Guetta", "Deseleccionar todos", 0, QApplication::UnicodeUTF8));
-        checkBox_showKeypoints->setText(QApplication::translate("Guetta", "mostrar keyPoints", 0, QApplication::UnicodeUTF8));
+        checkBox->setText(QApplication::translate("Guetta", "mostrar keyPoints", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Guetta", "Tab 2", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("Guetta", "Page", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
