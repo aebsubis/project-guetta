@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'Guetta.h'
 **
-** Created: Tue Nov 1 15:25:34 2011
+** Created: Tue Nov 1 17:56:24 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.2)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_Guetta[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -42,6 +42,7 @@ static const uint qt_meta_data_Guetta[] = {
      200,    7,    7,    7, 0x0a,
      219,    7,    7,    7, 0x0a,
      251,  240,    7,    7, 0x0a,
+     274,    7,    7,    7, 0x0a,
 
        0        // eod
 };
@@ -54,7 +55,7 @@ static const char qt_meta_stringdata_Guetta[] = {
     "changeAcumular()\0procesarClouds()\0"
     "seleccionarDirectorio()\0seleccionarTodos()\0"
     "deseleccionarTodos()\0incremento\0"
-    "cambiarIncremento(int)\0"
+    "cambiarIncremento(int)\0changeShowKeypoints()\0"
 };
 
 const QMetaObject Guetta::staticMetaObject = {
@@ -97,9 +98,10 @@ int Guetta::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 8: seleccionarTodos(); break;
         case 9: deseleccionarTodos(); break;
         case 10: cambiarIncremento((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 11: changeShowKeypoints(); break;
         default: ;
         }
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }

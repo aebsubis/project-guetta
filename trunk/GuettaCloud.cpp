@@ -62,11 +62,10 @@ GuettaCloud& GuettaCloud::operator=(const GuettaCloud& guettaCloud)
 {
     if(this != &guettaCloud)
     { 
+        this->data.resize(guettaCloud.data.size());
         for(int i = 0; i < data.size(); i++)
         {
-            this->data.resize(guettaCloud.data.size());
-                this->data[i] = guettaCloud.data[i]; 
-                
+            this->data[i] = guettaCloud.data[i]; 
         }
         pointCloud = guettaCloud.pointCloud;
     }

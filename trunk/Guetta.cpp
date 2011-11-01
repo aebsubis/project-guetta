@@ -29,6 +29,9 @@ Guetta::Guetta() {
     connect(widget.pushButton_allunselect,SIGNAL(clicked()),this,SLOT(deseleccionarTodos()));
     connect(widget.spinBox_incremento,SIGNAL(valueChanged(int)),this,SLOT(cambiarIncremento(int)));
       
+    connect(widget.checkBox_showKeypoints,SIGNAL(clicked()),this,SLOT(changeShowKeypoints()));
+    
+    
     //connect(widget.comboBox1,SIGNAL(currentIndexChangeg(QString),this,SLOT(changeCloud1
     maxDistanceSIFT = 20000;
     maxKeyPointsAlineamientoSIFT = 7;
@@ -87,8 +90,14 @@ Guetta::Guetta() {
     
 
     widget.tableWidget_clouds->setRowCount(60);
-  
+  drawKeyPoints = false;
 }
+
+void Guetta::changeShowKeypoints()
+{
+    drawKeyPoints = widget.checkBox_showKeypoints->isChecked();
+}
+
 void Guetta::seleccionarTodos()
 {
     int total = widget.lineEdit_total->text().toInt();
@@ -170,7 +179,13 @@ void Guetta::procesarClouds()
     }
     viewers[4]->unselectables.clear();
     
-  
+     for(int i = 0; i < viewers[4]->selectables.size(); i++)
+    {
+        if(viewers[4]->selectables[i] != NULL)
+                delete viewers[4]->selectables[i];
+    }
+    viewers[4]->selectables.clear();
+    
     string prefijo = widget.lineEdit_directorio->text().toStdString() + "/";
     int actualIndex = -1;
     actualIndex = getNextCloud(actualIndex);
@@ -189,9 +204,17 @@ void Guetta::procesarClouds()
     GuettaCloud* cloudResultado = transform(cloud2, transformation);
     GuettaCloud* featuresResultado = transform(features2, transformation);
   
-    viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloud1);
-    viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
-
+    if(drawKeyPoints == false)
+    {
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloud1);
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
+    }
+    else
+    {
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),features1);
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
+    }
+    
     int total = widget.lineEdit_total->text().toInt();
     for(int i = 2; i < total; i++)
     {
@@ -200,15 +223,28 @@ void Guetta::procesarClouds()
             break;
         string nameCloud = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
         features1 = featuresResultado; 
-        features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud],prefijo+nameCloud,RGB(0,1,0));
+        float aux = (rand() % 255)/255.0;
+
+        features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud],prefijo+nameCloud,RGB(0,0,0.9));
         cloud1 = cloudResultado;
         cloud2 = new GuettaCloud(pclClouds[nameCloud]);
-    
+        
         transformation = emparejar(true,cloud1,cloud2,features1,features2);
         cloudResultado = transform(cloud2, transformation);
         featuresResultado = transform(features2, transformation);
-
-        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
+        if(drawKeyPoints == false)
+        {
+            viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
+        }
+        else
+        {
+            viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
+        }
+        
+        //delete cloud1;
+        delete cloud2;
+        //delete features1;
+        //delete features2;
     }
 }
 

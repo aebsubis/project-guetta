@@ -26,6 +26,17 @@ class RGB
             this->b = 0;
         }   
         
+        RGB& operator=(const RGB &rgb)
+        {
+            if(this != &rgb)
+            {
+                this->r = rgb.r;
+                this->g = rgb.g;
+                this->b = rgb.b;
+            }
+            return *this;
+        }
+                    
         float r;
         float g;
         float b;
