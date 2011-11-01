@@ -57,6 +57,7 @@ class Guetta : public QDialog
             void seleccionarTodos();
             void deseleccionarTodos();
             void cambiarIncremento(int incremento);
+            void changeShowKeypoints();
             
         private:
             string convert(float value);
@@ -73,6 +74,7 @@ class Guetta : public QDialog
             float maxDistanceSURF;
             int maxKeyPointsSIFT; 
             vector<GuettaCloud> clouds;
+            bool drawKeyPoints;
 };      
 
 #endif	/* _GUETTA_H */

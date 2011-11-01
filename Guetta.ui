@@ -466,7 +466,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>6</string>
+      <string>3</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_13">
@@ -551,7 +551,7 @@
       <number>2</number>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="checkBox_showKeypoints">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -572,17 +572,13 @@
     <widget class="QWidget" name="gridLayoutWidget_3">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>1411</width>
-       <height>561</height>
+       <x>70</x>
+       <y>30</y>
+       <width>591</width>
+       <height>461</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-     </layout>
+     <layout class="QGridLayout" name="gridLayout_3"/>
     </widget>
    </widget>
   </widget>
