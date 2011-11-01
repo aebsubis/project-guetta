@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Guetta.ui'
 **
-** Created: Sun Oct 30 19:40:58 2011
+** Created: Tue Nov 1 14:58:30 2011
 **      by: Qt User Interface Compiler version 4.7.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -24,8 +24,9 @@
 #include <QtGui/QLineEdit>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
+#include <QtGui/QSpinBox>
 #include <QtGui/QTabWidget>
-#include <QtGui/QTableView>
+#include <QtGui/QTableWidget>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -68,10 +69,18 @@ public:
     QLabel *label_10;
     QLineEdit *lineEdit_directorio;
     QPushButton *pushButton_seleccionarDirectorio;
-    QTableView *tableView;
     QPushButton *pushButton_procesar;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
+    QLabel *label_11;
+    QLabel *label_12;
+    QLineEdit *lineEdit_maxNubes;
+    QLabel *label_13;
+    QLineEdit *lineEdit_total;
+    QTableWidget *tableWidget_clouds;
+    QPushButton *pushButton_allselect;
+    QPushButton *pushButton_allunselect;
+    QSpinBox *spinBox_incremento;
     QWidget *tab_5;
     QWidget *gridLayoutWidget_3;
     QGridLayout *gridLayout_3;
@@ -83,7 +92,7 @@ public:
         Guetta->resize(1435, 824);
         tabWidget = new QTabWidget(Guetta);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(0, 10, 1421, 811));
+        tabWidget->setGeometry(QRect(-10, 10, 1421, 811));
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
         tabWidget_2 = new QTabWidget(tab);
@@ -187,20 +196,51 @@ public:
         lineEdit_directorio->setGeometry(QRect(110, 30, 113, 27));
         pushButton_seleccionarDirectorio = new QPushButton(tab_2);
         pushButton_seleccionarDirectorio->setObjectName(QString::fromUtf8("pushButton_seleccionarDirectorio"));
-        pushButton_seleccionarDirectorio->setGeometry(QRect(240, 30, 97, 27));
-        tableView = new QTableView(tab_2);
-        tableView->setObjectName(QString::fromUtf8("tableView"));
-        tableView->setGeometry(QRect(730, 20, 111, 521));
+        pushButton_seleccionarDirectorio->setGeometry(QRect(410, 30, 97, 27));
         pushButton_procesar = new QPushButton(tab_2);
         pushButton_procesar->setObjectName(QString::fromUtf8("pushButton_procesar"));
-        pushButton_procesar->setGeometry(QRect(350, 30, 97, 27));
+        pushButton_procesar->setGeometry(QRect(700, 30, 97, 27));
         gridLayoutWidget_2 = new QWidget(tab_2);
         gridLayoutWidget_2->setObjectName(QString::fromUtf8("gridLayoutWidget_2"));
-        gridLayoutWidget_2->setGeometry(QRect(10, 90, 661, 491));
+        gridLayoutWidget_2->setGeometry(QRect(10, 70, 661, 491));
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         gridLayout_2->setSizeConstraint(QLayout::SetMaximumSize);
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
+        label_11 = new QLabel(tab_2);
+        label_11->setObjectName(QString::fromUtf8("label_11"));
+        label_11->setGeometry(QRect(240, 30, 111, 17));
+        label_12 = new QLabel(tab_2);
+        label_12->setObjectName(QString::fromUtf8("label_12"));
+        label_12->setGeometry(QRect(980, 160, 81, 20));
+        lineEdit_maxNubes = new QLineEdit(tab_2);
+        lineEdit_maxNubes->setObjectName(QString::fromUtf8("lineEdit_maxNubes"));
+        lineEdit_maxNubes->setGeometry(QRect(360, 30, 41, 27));
+        label_13 = new QLabel(tab_2);
+        label_13->setObjectName(QString::fromUtf8("label_13"));
+        label_13->setGeometry(QRect(710, 560, 67, 17));
+        lineEdit_total = new QLineEdit(tab_2);
+        lineEdit_total->setObjectName(QString::fromUtf8("lineEdit_total"));
+        lineEdit_total->setGeometry(QRect(770, 550, 113, 27));
+        tableWidget_clouds = new QTableWidget(tab_2);
+        if (tableWidget_clouds->columnCount() < 2)
+            tableWidget_clouds->setColumnCount(2);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        tableWidget_clouds->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        tableWidget_clouds->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        tableWidget_clouds->setObjectName(QString::fromUtf8("tableWidget_clouds"));
+        tableWidget_clouds->setGeometry(QRect(700, 70, 261, 471));
+        pushButton_allselect = new QPushButton(tab_2);
+        pushButton_allselect->setObjectName(QString::fromUtf8("pushButton_allselect"));
+        pushButton_allselect->setGeometry(QRect(980, 80, 171, 27));
+        pushButton_allunselect = new QPushButton(tab_2);
+        pushButton_allunselect->setObjectName(QString::fromUtf8("pushButton_allunselect"));
+        pushButton_allunselect->setGeometry(QRect(990, 120, 161, 27));
+        spinBox_incremento = new QSpinBox(tab_2);
+        spinBox_incremento->setObjectName(QString::fromUtf8("spinBox_incremento"));
+        spinBox_incremento->setGeometry(QRect(1080, 160, 59, 27));
+        spinBox_incremento->setValue(2);
         tabWidget->addTab(tab_2, QString());
         tab_5 = new QWidget();
         tab_5->setObjectName(QString::fromUtf8("tab_5"));
@@ -214,7 +254,7 @@ public:
 
         retranslateUi(Guetta);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(1);
         tabWidget_2->setCurrentIndex(0);
 
 
@@ -243,9 +283,19 @@ public:
         label_2->setText(QApplication::translate("Guetta", "Cloud2:", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Guetta", "Tab 1", 0, QApplication::UnicodeUTF8));
         label_10->setText(QApplication::translate("Guetta", "Directorio:", 0, QApplication::UnicodeUTF8));
-        lineEdit_directorio->setText(QApplication::translate("Guetta", "prueba1", 0, QApplication::UnicodeUTF8));
+        lineEdit_directorio->setText(QApplication::translate("Guetta", "comedor", 0, QApplication::UnicodeUTF8));
         pushButton_seleccionarDirectorio->setText(QApplication::translate("Guetta", "Seleccionar", 0, QApplication::UnicodeUTF8));
         pushButton_procesar->setText(QApplication::translate("Guetta", "Procesar", 0, QApplication::UnicodeUTF8));
+        label_11->setText(QApplication::translate("Guetta", "Max\303\255mo nubes:", 0, QApplication::UnicodeUTF8));
+        label_12->setText(QApplication::translate("Guetta", "Incremento:", 0, QApplication::UnicodeUTF8));
+        lineEdit_maxNubes->setText(QApplication::translate("Guetta", "6", 0, QApplication::UnicodeUTF8));
+        label_13->setText(QApplication::translate("Guetta", "total:", 0, QApplication::UnicodeUTF8));
+        QTableWidgetItem *___qtablewidgetitem = tableWidget_clouds->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QApplication::translate("Guetta", "Usar", 0, QApplication::UnicodeUTF8));
+        QTableWidgetItem *___qtablewidgetitem1 = tableWidget_clouds->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QApplication::translate("Guetta", "Nombre", 0, QApplication::UnicodeUTF8));
+        pushButton_allselect->setText(QApplication::translate("Guetta", "Seleccionar todos", 0, QApplication::UnicodeUTF8));
+        pushButton_allunselect->setText(QApplication::translate("Guetta", "Deseleccionar todos", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Guetta", "Tab 2", 0, QApplication::UnicodeUTF8));
         tabWidget->setTabText(tabWidget->indexOf(tab_5), QApplication::translate("Guetta", "Page", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

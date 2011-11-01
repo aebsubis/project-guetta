@@ -2,13 +2,13 @@
 # Use project properties -> Build -> Qt -> Expert -> Custom Definitions.
 TEMPLATE = app
 DESTDIR = dist/Debug/GNU-Linux-x86
-TARGET = QtApplication_1
+TARGET = project-guetta
 VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 QT = core gui opengl
-SOURCES += main.cpp StandardCamera.cpp GLWidget.cpp GuettaFeatures.cpp Tetrahedron.cpp Guetta.cpp Viewer.cpp newForm.cpp GuettaViewer.cpp
-HEADERS += GuettaKeyPoint.h GuettaFeatures.h StandardCamera.h GLWidget.h Viewer.h GuettaViewer.h newForm.h Guetta.h Tetrahedron.h
+SOURCES += main.cpp StandardCamera.cpp GLWidget.cpp GuettaFeatures.cpp Tetrahedron.cpp Guetta.cpp Viewer.cpp newForm.cpp
+HEADERS += GuettaKeyPoint.h GuettaFeatures.h StandardCamera.h GLWidget.h Viewer.h newForm.h Guetta.h Tetrahedron.h
 FORMS += GuettaViewer.ui newForm.ui Guetta.ui
 RESOURCES +=
 TRANSLATIONS +=

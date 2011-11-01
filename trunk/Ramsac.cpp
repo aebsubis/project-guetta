@@ -53,7 +53,7 @@ void Ramsac::compute(int indice, string combinacion)
     //{
         
         
-        if(combinacion.length() >= 5)
+        if(combinacion.length() >= 6)
         {
             // Calculamos
 
@@ -64,11 +64,11 @@ void Ramsac::compute(int indice, string combinacion)
                 GuettaCloud* resultado = new GuettaCloud();
                 Eigen::Matrix4f transformation_matrix;
                 float distancia = getDistanciaTotal(guettaCloud2, indices, guettaCloud1, indices, resultado, transformation_matrix);
-                cout << indice << " [" << combinacion << "] -> " << distancia << endl;
+                //cout << indice << " [" << combinacion << "] -> " << distancia << endl;
                 if(distancia < menorDistancia)
                 {
-                    cout << "MENOR: " << indice << " [" << combinacion << "] -> " << distancia << endl;
-                   
+                  //  cout << "MENOR: " << indice << " [" << combinacion << "] -> " << distancia << endl;
+                    transformacion = transformation_matrix;
                     menorDistancia = distancia;
                     mejorCombinacion = indices;
                 }

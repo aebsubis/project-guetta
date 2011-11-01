@@ -98,8 +98,9 @@ class GuettaKeyPoint
                  int pos = 0;
                  for(int i = 0; i < keyPoints.size(); i++)
                  {
+                  
                      float distance = distanceDescriptor(keyPoints[i]);
-                     //cout << "distance " << i << " : " << distance << endl;
+                     
                      if(distance < min)
                      {
                          //cout << "min " << i << " : " << distance << endl;

@@ -34,6 +34,7 @@ class Ramsac
         void split(const string& str, const string& delimiters , vector<int>& tokens);
                vector<int> mejorCombinacion;
         float menorDistancia;
+        Eigen::Matrix4f transformacion;
 private:
         GuettaCloud* guettaCloud1;
         GuettaCloud* guettaCloud2;
