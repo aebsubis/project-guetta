@@ -14,6 +14,33 @@ Viewer::Viewer(QWidget* parent, int idViewport)
     QObject::connect(this, SIGNAL(selectedKeyPoint(int,int)),parent,SLOT(selectedKeyPoint(int,int)));
 }
 
+Viewer::~Viewer()
+{
+    cout << "destructor viewer" << endl;
+    for(int i = 0; i < unselectables.size(); i++)
+    {
+        if(unselectables[i] != NULL)
+        {
+            delete unselectables[i];
+            unselectables[i] = NULL;
+        }
+    }
+    //unselectables.clear();
+    
+/*
+    cout << idViewport << " tam: " << selectables.size() << endl;
+    for(int i = 0; i < selectables.size(); i++)
+    {
+        if(selectables[i] != NULL)
+        {
+            delete selectables[i];
+            selectables[i] = NULL;
+        }
+    }
+    selectables.clear();
+  */  
+}
+
 void Viewer::drawKeyPoints(bool name)
 {
     glRotatef(180,1,0,0);

@@ -37,11 +37,13 @@ class Guetta : public QDialog
             Guetta();
             virtual ~Guetta();
             void loadClouds();
-            
-                void loadClouds(string directorio);
+            void loadClouds(string directorio);
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr loadPCD(string name);
             float getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGuettaCloud1,GuettaCloud* guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado);
-            GuettaCloud* emparejar(GuettaCloud* guettaCloud1, GuettaCloud* guettaCloud2, GuettaCloud* features1, GuettaCloud* features2);
+            Eigen::Matrix4f emparejar(bool pintar, GuettaCloud* guettaCloud1, GuettaCloud* guettaCloud2, GuettaCloud* features1, GuettaCloud* features2);
+            GuettaCloud* transform(GuettaCloud* guettaCloud, Eigen::Matrix4f transformation_matrix);
+            int getNextCloud(int actualIndex);
+            
         public slots:
             void changeCloud1(QString cloud);
             void changeCloud2(QString cloud);
@@ -50,17 +52,22 @@ class Guetta : public QDialog
             void changeOptions();
             void changeAcumular();
             void procesarClouds();
+            void seleccionarDirectorio();
+            void seleccionarTodos();
+            void deseleccionarTodos();
+            void cambiarIncremento(int incremento);
             
         private:
+            string convert(float value);
+            
             bool acumular;
             string cloud1, cloud2;
-                int countSelection;
-                Ui::Guetta widget;
-                string convert(float value);
-                map<string, PointCloud<PointXYZRGB>::Ptr> pclClouds;
-                vector<Viewer*> viewers;
-                GuettaKeyPoint* previousPoint;
-                        float maxDistanceSIFT;
+            int countSelection;
+            Ui::Guetta widget;
+            map<string, PointCloud<PointXYZRGB>::Ptr> pclClouds;
+            vector<Viewer*> viewers;
+            GuettaKeyPoint* previousPoint;
+            float maxDistanceSIFT;
             int maxKeyPointsAlineamientoSIFT;
             float maxDistanceSURF;
             int maxKeyPointsSIFT; 

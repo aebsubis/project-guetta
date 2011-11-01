@@ -1,4 +1,5 @@
 #include <pcl-1.1/pcl/io/openni_grabber.h>
+#include <pcl-1.1/pcl/io/io.h>
 
 #include "GuettaCloud.h"
 
@@ -18,8 +19,12 @@ GuettaCloud::GuettaCloud(const GuettaCloud& guettaCloud)
 
 GuettaCloud::~GuettaCloud()
 {
+    //cout << "tam: " << data.size() << endl;
     for(int i = 0; i < data.size(); i++)
-        delete this->data[i]; 
+    {
+        if(data[i] != NULL)
+                delete data[i]; 
+    }
 }
 
 GuettaCloud::GuettaCloud(PointCloud<PointXYZRGB>::Ptr cloud)
@@ -30,6 +35,8 @@ GuettaCloud::GuettaCloud(PointCloud<PointXYZRGB>::Ptr cloud)
         PointXYZRGB point = cloud->points[i];
         data[i] = new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b,NULL);
     }
+    //PointCloud<PointXYZ>::Ptr key3DCloud (new PointCloud<PointXYZ>);
+    //copyPointCloud(*cloud,*pointCloud);
     pointCloud = cloud;
 }
 
@@ -43,7 +50,9 @@ PointCloud<PointXYZRGB>::Ptr GuettaCloud::getPointCloud()
         point.x = guettaPoint->x;
         point.y = guettaPoint->y;
         point.z = guettaPoint->z;
-        
+        point.r = guettaPoint->r;
+        point.g = guettaPoint->g;
+        point.b = guettaPoint->b;      
         pointCloud->points.push_back (point);
     }     
      return pointCloud;
@@ -60,5 +69,6 @@ GuettaCloud& GuettaCloud::operator=(const GuettaCloud& guettaCloud)
                 
         }
     }
+    pointCloud = guettaCloud.pointCloud;
     return *this;
 }

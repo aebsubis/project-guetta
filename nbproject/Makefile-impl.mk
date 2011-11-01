@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=QtApplication_1
+PROJECTNAME=project-guetta
 
 # Active Configuration
 DEFAULTCONF=Debug

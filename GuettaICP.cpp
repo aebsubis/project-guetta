@@ -23,21 +23,26 @@ void GuettaICP::getNearestDescriptors(int maxKeyPointsAlineamiento, float maxDis
     vector<int> indicesInputCloud;   
     int numDescriptores = 0;
     
-    cout << maxKeyPointsAlineamiento << " y " << maxDistance << endl;
+    //cout << maxKeyPointsAlineamiento << ";" << maxDistance << ";" << inputTarget->data.size() << ";" << inputCloud->data.size() << endl;
+    
     int contador = 0;
     for(int i = 0; i < inputTarget->data.size() && numDescriptores != maxKeyPointsAlineamiento; i++)
     {
+
         GuettaKeyPoint* keyPoint = inputTarget->data[i];
+
         // Calculamos los descriptores más cercanos en el otro input cloud
         vector<int> nearest = keyPoint->getNeareastDescriptor3(inputCloud->data);
+
         // Calculamos si el más cercano es menor que la maxima distancia
         float distancia = inputCloud->data[nearest[0]]->distanceDescriptor(keyPoint);
+
         float distanciaXYZ = inputCloud->data[nearest[0]]->distanceXYZ(keyPoint);
         if(distancia < maxDistance)
         {
             contador++;
             // Añadimos los indices
-            cout << contador << " -> distancia: " << i << "," << nearest[0] << " : " << distancia << ", distancia xyz: " << distanciaXYZ << endl;
+            //cout << contador << " -> distancia: " << i << "," << nearest[0] << " : " << distancia << ", distancia xyz: " << distanciaXYZ << endl;
             
             numDescriptores++;
             indicesInputTarget.insert(indicesInputTarget.end(),i);
@@ -46,7 +51,7 @@ void GuettaICP::getNearestDescriptors(int maxKeyPointsAlineamiento, float maxDis
     }    
     
     // Creamos el guettaCloud 
-    cout << "Hay: " << indicesInputTarget.size() << endl;
+   
     for(int i = 0; i < indicesInputTarget.size(); i++)
     {
         
@@ -64,25 +69,7 @@ void GuettaICP::getNearestDescriptors(int maxKeyPointsAlineamiento, float maxDis
         guettaPoint2->g = 0;
         guettaPoint2->b = 0;       
         cloud2->data.insert(cloud2->data.end(),guettaPoint2);
-        
-        /*
-          GuettaKeyPoint* keyPoint = inputCloud->data[indicesInputCloud[i]];
-
-        keyPoint->r = 0;
-        keyPoint->g = 0;
-        keyPoint->b = 1;
-        
-        keyPoint = inputTarget->data[indicesInputTarget[i]];
-                keyPoint->r = 0;
-        keyPoint->g = 0;
-        keyPoint->b = 1;*/
-        //GuettaKeyPoint* guettaPoint = new GuettaKeyPoint(*keyPoint);
-        //point.x = 
-        //PointXYZRGB point = cloud3->points[i];
-        //guettaCloud->data[i] = new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b,inputTarget->data[i]->descriptor);
-        
     }    
-
 }
 
 
@@ -98,7 +85,7 @@ GuettaCloud* GuettaICP::compute(Eigen::Matrix4f& transformation_matrix, int maxK
     vector<int> indicesInputCloud;   
     int numDescriptores = 0;
     
-    cout << maxKeyPointsAlineamiento << " y " << maxDistance << endl;
+    //cout << maxKeyPointsAlineamiento << " y " << maxDistance << endl;
     int contador = 0;
     for(int i = 0; i < inputTarget->data.size() && numDescriptores != maxKeyPointsAlineamiento; i++)
     {
@@ -112,7 +99,7 @@ GuettaCloud* GuettaICP::compute(Eigen::Matrix4f& transformation_matrix, int maxK
         {
             contador++;
             // Añadimos los indices
-            cout << contador << " -> distancia: " << i << " : " << distancia << ", distancia xyz: " << distanciaXYZ << endl;
+            //cout << contador << " -> distancia: " << i << " : " << distancia << ", distancia xyz: " << distanciaXYZ << endl;
             
             numDescriptores++;
             indicesInputTarget.insert(indicesInputTarget.end(),i);

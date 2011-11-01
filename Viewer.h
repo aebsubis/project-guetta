@@ -25,6 +25,7 @@ class Viewer : public QGLViewer
         Viewer(QWidget* parent, int idViewport);
         void drawCloud(bool name);
         void drawKeyPoints(bool name);
+        ~Viewer();
         
     protected:
       virtual void draw();
@@ -35,9 +36,6 @@ class Viewer : public QGLViewer
     public:
         vector<GuettaCloud*> selectables;
         vector<GuettaCloud*> unselectables;
-        
-        vector<GuettaKeyPoint> cloud;
-        vector<GuettaKeyPoint> keyPoints;
         qglviewer::Vec orig, dir, selectedPoint;
         
     signals:

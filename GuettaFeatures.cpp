@@ -127,7 +127,9 @@ GuettaCloud* GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
     }
     cout << "tamaño final: " << guettakeyPoints.size() << endl;
     cout << "Time sift: " << time.stop() << " ms" << endl;
-    return new GuettaCloud(guettakeyPoints);
+    GuettaCloud* resultado = new GuettaCloud(guettakeyPoints);
+    resultado->pointCloud = resultado->getPointCloud();
+    return resultado;
 }
 
 /*

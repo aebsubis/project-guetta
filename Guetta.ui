@@ -16,14 +16,14 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>-10</x>
      <y>10</y>
      <width>1421</width>
      <height>811</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -386,13 +386,13 @@
       </rect>
      </property>
      <property name="text">
-      <string>prueba1</string>
+      <string>comedor</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_seleccionarDirectorio">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>410</x>
        <y>30</y>
        <width>97</width>
        <height>27</height>
@@ -402,20 +402,10 @@
       <string>Seleccionar</string>
      </property>
     </widget>
-    <widget class="QTableView" name="tableView">
-     <property name="geometry">
-      <rect>
-       <x>730</x>
-       <y>20</y>
-       <width>111</width>
-       <height>521</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QPushButton" name="pushButton_procesar">
      <property name="geometry">
       <rect>
-       <x>350</x>
+       <x>700</x>
        <y>30</y>
        <width>97</width>
        <height>27</height>
@@ -429,7 +419,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>70</y>
        <width>661</width>
        <height>491</height>
       </rect>
@@ -439,6 +429,127 @@
        <enum>QLayout::SetMaximumSize</enum>
       </property>
      </layout>
+    </widget>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>30</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Maxímo nubes:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_12">
+     <property name="geometry">
+      <rect>
+       <x>980</x>
+       <y>160</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Incremento:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_maxNubes">
+     <property name="geometry">
+      <rect>
+       <x>360</x>
+       <y>30</y>
+       <width>41</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>6</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_13">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>560</y>
+       <width>67</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>total:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_total">
+     <property name="geometry">
+      <rect>
+       <x>770</x>
+       <y>550</y>
+       <width>113</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tableWidget_clouds">
+     <property name="geometry">
+      <rect>
+       <x>700</x>
+       <y>70</y>
+       <width>261</width>
+       <height>471</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>Usar</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nombre</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QPushButton" name="pushButton_allselect">
+     <property name="geometry">
+      <rect>
+       <x>980</x>
+       <y>80</y>
+       <width>171</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Seleccionar todos</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_allunselect">
+     <property name="geometry">
+      <rect>
+       <x>990</x>
+       <y>120</y>
+       <width>161</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Deseleccionar todos</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_incremento">
+     <property name="geometry">
+      <rect>
+       <x>1080</x>
+       <y>160</y>
+       <width>59</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="value">
+      <number>2</number>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_5">
