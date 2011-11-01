@@ -68,7 +68,7 @@ GuettaCloud& GuettaCloud::operator=(const GuettaCloud& guettaCloud)
                 this->data[i] = guettaCloud.data[i]; 
                 
         }
+        pointCloud = guettaCloud.pointCloud;
     }
-    pointCloud = guettaCloud.pointCloud;
     return *this;
 }

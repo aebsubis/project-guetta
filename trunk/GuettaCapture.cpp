@@ -7,47 +7,8 @@
 
 #include "GuettaCapture.h"
 
-#include <boost/thread.hpp>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-
-#include "pcl/console/parse.h"
-#include "pcl/common/time.h"
-#include "pcl/common/common_headers.h"
-
-#include "pcl/features/normal_3d.h"
-#include "pcl/features/range_image_border_extractor.h"
-
-#include "pcl/filters/passthrough.h"
-
-#include "pcl/io/openni_grabber.h"
-#include "pcl/io/pcd_io.h"
-
-#include "pcl/impl/point_types.hpp"
-
-#include "pcl/keypoints/narf_keypoint.h"
-
-#include <pcl/point_cloud.h>
-#include <pcl/point_types.h>
-
-#include "pcl/registration/icp.h"
-#include "pcl/range_image/range_image.h"
-
-//#include "pcl/visualization/cloud_viewer.h"
-//#include "pcl/visualization/pcl_visualizer.h"
-#include "pcl/visualization/range_image_visualizer.h"
-#include <pcl/registration/icp_nl.h>
-#include <opencv/cv.h>
-#include "opencv2/highgui/highgui.hpp"
-
-using namespace std;
-using namespace pcl;
-using namespace pcl::visualization;
-using namespace pcl::io;
-using namespace boost;
-using namespace cv;
-
-GuettaCapture::GuettaCapture() {
+GuettaCapture::GuettaCapture() 
+{
     widget.setupUi(this);
     
     connect(widget.lineEditSceneName, SIGNAL(editingFinished()), this, SLOT(renameCapture()));
@@ -67,9 +28,9 @@ GuettaCapture::GuettaCapture() {
     widget.realTimeViewer->addWidget(viewers[0],0,0);
     widget.capturedViewer->addWidget(viewers[1],0,0);
     
-    cout << viewers[0]->unselectables.size() << endl;
-    viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), new GuettaCloud());
-    cout << viewers[0]->unselectables.size() << endl;
+    //cout << viewers[0]->unselectables.size() << endl;
+    //viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), new GuettaCloud());
+    //cout << viewers[0]->unselectables.size() << endl;
     
     PointCloud<PointXYZRGB>::Ptr aux_rt_cloud (new PointCloud<PointXYZRGB>);
     rt_cloud = aux_rt_cloud;
@@ -118,6 +79,7 @@ void GuettaCapture::capture() {
 
 void GuettaCapture::cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr &cloud)
 {
+    /*
     this_thread::sleep(posix_time::milliseconds(1));
     fps++;
     if(timer.elapsed() > 1) {
@@ -126,21 +88,25 @@ void GuettaCapture::cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr &cloud)
         timer.restart();
     }
     cout << "a" << endl;
+    //cout << "size: " << viewers[0]->unselectables[0].data.size() << endl;
     delete viewers[0]->unselectables[0];
+    viewers[0]->unselectables.clear();
     cout << "b" << endl;
     copyPointCloud(*cloud, *rt_cloud);
     cout << "c" << endl;
     GuettaCloud* gt_cloud = new GuettaCloud(rt_cloud);
     cout << "d" << endl;
-    viewers[0]->unselectables[0] = gt_cloud;
+    viewers[0]->unselectables.insert(viewers[0]->unselectables.end(), gt_cloud);
+   // viewers[0]->unselectables[0] = gt_cloud;
     cout << "e" << endl;
-    //viewers[0]->updateGL();
-    
+    viewers[0]->updateGL();
+    cout << "f" << endl;
     if (guardarXYZ) {
        string RGBfilename = widget.lineEditCaptureName->text().toStdString() + ".pcd";
        pcl::io::savePCDFileASCII (RGBfilename, *cloud);
        guardarXYZ = false;
-    }
+    }*/
+    viewers[0]->updateGL();
 }
 
 void GuettaCapture::cloud2_cb_ (const boost::shared_ptr<openni_wrapper::Image>& data)

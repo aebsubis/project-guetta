@@ -9,6 +9,26 @@
 #define	_GuettaCapture_H
 
 #include "ui_GuettaCapture.h"
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/io/pcd_io.h>
+#include <iostream>
+#include "Viewer.h"
+#include "GuettaCloud.h"
+#include "GuettaFeatures.h"
+#include "RGB.h"
+#include <pcl/registration/transforms.h>
+#include "pcl/common/transform.h"
+#include "pcl/registration/icp.h"
+#include "pcl/registration/registration.h"
+#include "Ramsac.h"
+#include "pcl/sample_consensus/ransac.h"
+#include "pcl/sample_consensus/sac_model_registration.h"
+#include "GuettaICP.h"
+#include <boost/timer.hpp>
+
+/*
+#include "ui_GuettaCapture.h"
 #include <iostream>
 
 #include <boost/thread/thread.hpp>
@@ -42,15 +62,14 @@
 #include <opencv/cv.h>
 #include "opencv2/highgui/highgui.hpp"
 #include "Viewer.h"
-
+*/
 using namespace std;
 using namespace pcl;
-using namespace pcl::visualization;
 using namespace pcl::io;
 using namespace boost;
 using namespace cv;
 
-class GuettaCapture : public QWidget {
+class GuettaCapture : public QDialog {
     Q_OBJECT
         public:
             GuettaCapture();
