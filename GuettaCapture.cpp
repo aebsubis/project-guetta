@@ -10,6 +10,7 @@
 
 GuettaCapture::GuettaCapture() 
 {
+    /*
     widget.setupUi(this);
     
     connect(widget.lineEditSceneName, SIGNAL(editingFinished()), this, SLOT(renameCapture()));
@@ -34,7 +35,7 @@ GuettaCapture::GuettaCapture()
     //cout << viewers[0]->unselectables.size() << endl;
     
     PointCloud<PointXYZRGB>::Ptr aux_rt_cloud (new PointCloud<PointXYZRGB>);
-    rt_cloud = aux_rt_cloud;
+    rt_cloud = aux_rt_cloud;*/
 }
 
 GuettaCapture::~GuettaCapture() {

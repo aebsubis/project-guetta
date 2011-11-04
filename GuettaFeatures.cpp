@@ -118,7 +118,7 @@ GuettaCloud* GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
             point->r = color.r;
             point->g = color.g;
             point->b = color.b;
-            cout << point->b << endl;
+           
             float* descriptor = new float[128];
             for (int x = 0; x < 128; x++) 
                     descriptor[x] = descriptores.at<float>(i, x);

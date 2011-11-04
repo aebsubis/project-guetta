@@ -17,19 +17,24 @@ using namespace pcl::io;
 using namespace boost;
 #include "newForm.h"
 #include "Guetta.h"
-
+#include <X11/Xlib.h>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
 using namespace std;
 int main(int argc, char *argv[])
 {
     
+if (!XInitThreads()) {
+printf("Xlib not thread safe\n");
+exit(1);
+}
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC,"C");
 
     Guetta guetta;
     guetta.show();
-
+    
+    
     return app.exec();
     /*
     shared_ptr<int> ptr2(new int);
