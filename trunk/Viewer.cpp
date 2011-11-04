@@ -12,6 +12,7 @@ Viewer::Viewer(QWidget* parent, int idViewport)
     this->idViewport = idViewport;
     countSelect = 0;
     QObject::connect(this, SIGNAL(selectedKeyPoint(int,int)),parent,SLOT(selectedKeyPoint(int,int)));
+    //setAutoBufferSwap(false);
 }
 
 Viewer::~Viewer()

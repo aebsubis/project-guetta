@@ -30,6 +30,37 @@ using namespace std;
 using namespace pcl;
 using namespace pcl::io;
 
+ class MyThread : public QThread
+ {
+     Q_OBJECT
+        public:
+            
+     MyThread(Viewer* viewer)
+     {
+         this->viewer = viewer;
+     }
+     
+
+         void run()
+         {
+             cout << "hola" << endl;
+             viewer->makeCurrent();
+             int i = 0;
+             while(1)
+             {
+                //cout << "actualizado: " << i << endl;
+                 //mutex.lock();
+                //i++;
+                //viewer->updateGL();
+                 //mutex.unlock();
+             }
+         }
+     
+        private:
+        Viewer* viewer;
+        QMutex mutex;
+};
+ 
 class Guetta : public QDialog 
 {
     Q_OBJECT
@@ -61,7 +92,7 @@ class Guetta : public QDialog
             
         private:
             string convert(float value);
-            
+             MyThread *thread ;
             bool acumular;
             string cloud1, cloud2;
             int countSelection;

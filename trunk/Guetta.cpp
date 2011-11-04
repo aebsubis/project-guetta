@@ -5,15 +5,26 @@
  * Created on 11 de octubre de 2011, 11:25
  */
 
+#include <qt4/QtCore/qthread.h>
+
 #include "Guetta.h"
 
 Guetta::Guetta() {
     widget.setupUi(this);
- 
+    /*
+   QGLContext* p = new QGLContext(QGLFormat::defaultFormat());
+        p->create();
+        p->makeCurrent();
+      */ 
+        cout << "holaaaa" << endl;
     // Creamos los visualizadores
     viewers.resize(5);
     for(int i = 0; i < 5; i++)
         viewers[i] = new Viewer(this,i);
+    
+      
+
+        
     acumular = false;
     connect(widget.radioButton_sift,SIGNAL(clicked()),this,SLOT(changeKeyPointMethod()));
     connect(widget.radioButton_narf,SIGNAL(clicked()),this,SLOT(changeKeyPointMethod()));
@@ -91,6 +102,9 @@ Guetta::Guetta() {
 
     widget.tableWidget_clouds->setRowCount(60);
   drawKeyPoints = false;
+
+
+
 }
 
 void Guetta::changeShowKeypoints()
@@ -100,12 +114,16 @@ void Guetta::changeShowKeypoints()
 
 void Guetta::seleccionarTodos()
 {
+    /*
     int total = widget.lineEdit_total->text().toInt();
     for(int i = 0; i < total; i++)
     {
         QTableWidgetItem *item = widget.tableWidget_clouds->item(i,0);
         item->setCheckState(Qt::Checked);
-    }  
+    } */
+    //viewers[4]->updateGL();
+    thread = new MyThread(viewers[4]);
+    thread->start();
 }
 
 void Guetta::deseleccionarTodos()
@@ -215,6 +233,16 @@ void Guetta::procesarClouds()
         viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
     }
     
+    cout << transformation << endl;
+    double roll = atan2(transformation(2,1),transformation(2,2));
+    double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+    double yaw = atan2(transformation(1,0),transformation(0,0));
+    roll = roll/M_PI*180;
+    pitch = pitch/M_PI*180;
+    yaw = yaw/M_PI*180;
+    double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+    cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
+    
     int total = widget.lineEdit_total->text().toInt();
     for(int i = 2; i < total; i++)
     {
@@ -230,6 +258,17 @@ void Guetta::procesarClouds()
         cloud2 = new GuettaCloud(pclClouds[nameCloud]);
         
         transformation = emparejar(true,cloud1,cloud2,features1,features2);
+        
+        cout << transformation << endl;
+        double roll = atan2(transformation(2,1),transformation(2,2));
+        double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+        double yaw = atan2(transformation(1,0),transformation(0,0));
+        roll = roll/M_PI*180;
+        pitch = pitch/M_PI*180;
+        yaw = yaw/M_PI*180;
+        double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+        cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
+    
         cloudResultado = transform(cloud2, transformation);
         featuresResultado = transform(features2, transformation);
         if(drawKeyPoints == false)
