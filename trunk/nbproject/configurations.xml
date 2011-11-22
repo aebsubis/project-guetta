@@ -15,11 +15,18 @@
       <itemPath>Guetta.ui</itemPath>
       <itemPath>GuettaCapture.cpp</itemPath>
       <itemPath>GuettaCapture.h</itemPath>
+      <itemPath>GuettaICP.cpp</itemPath>
+      <itemPath>GuettaICP.h</itemPath>
+      <itemPath>GuettaKeyPoint.h</itemPath>
       <itemPath>GuettaViewer.cpp</itemPath>
       <itemPath>GuettaViewer.h</itemPath>
       <itemPath>GuettaViewer.ui</itemPath>
       <itemPath>Node.cpp</itemPath>
       <itemPath>Node.h</itemPath>
+      <itemPath>Ramsac.cpp</itemPath>
+      <itemPath>Ramsac.h</itemPath>
+      <itemPath>Viewer.cpp</itemPath>
+      <itemPath>Viewer.h</itemPath>
       <itemPath>newForm.cpp</itemPath>
       <itemPath>newForm.h</itemPath>
       <itemPath>newForm.ui</itemPath>
@@ -31,13 +38,10 @@
       <itemPath>GLWidget.h</itemPath>
       <itemPath>GuettaFeatures.cpp</itemPath>
       <itemPath>GuettaFeatures.h</itemPath>
-      <itemPath>GuettaKeyPoint.h</itemPath>
       <itemPath>StandardCamera.cpp</itemPath>
       <itemPath>StandardCamera.h</itemPath>
       <itemPath>Tetrahedron.cpp</itemPath>
       <itemPath>Tetrahedron.h</itemPath>
-      <itemPath>Viewer.cpp</itemPath>
-      <itemPath>Viewer.h</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"

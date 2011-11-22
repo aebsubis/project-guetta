@@ -26,6 +26,10 @@
 #include "pcl/sample_consensus/sac_model_registration.h"
 #include "GuettaICP.h"
 #include "GuettaCapture.h"
+#include "Node.h"
+#include "GraphManager.h"
+#include <qt4/Qt/qlocalsocket.h>
+#include <pcl/filters/voxel_grid.h>
 using namespace std;
 using namespace pcl;
 using namespace pcl::io;
@@ -72,10 +76,10 @@ class Guetta : public QDialog
             void loadClouds(string directorio);
             pcl::PointCloud<pcl::PointXYZRGB>::Ptr loadPCD(string name);
             float getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGuettaCloud1,GuettaCloud* guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado);
-            Eigen::Matrix4f emparejar(bool pintar, GuettaCloud* guettaCloud1, GuettaCloud* guettaCloud2, GuettaCloud* features1, GuettaCloud* features2);
-            GuettaCloud* transform(GuettaCloud* guettaCloud, Eigen::Matrix4f transformation_matrix);
+            Eigen::Matrix4f emparejar(bool pintar, shared_ptr<GuettaCloud> features1, shared_ptr<GuettaCloud> features2, shared_ptr<GuettaCloud> cloudNearest1, shared_ptr<GuettaCloud> cloudNearest2);
+            shared_ptr<GuettaCloud> transform(shared_ptr<GuettaCloud> guettaCloud, Eigen::Matrix4f transformation_matrix);
             int getNextCloud(int actualIndex);
-            
+          
         public slots:
             void changeCloud1(QString cloud);
             void changeCloud2(QString cloud);
@@ -89,6 +93,8 @@ class Guetta : public QDialog
             void deseleccionarTodos();
             void cambiarIncremento(int incremento);
             void changeShowKeypoints();
+            void siguiente();
+            void mostrarInformacion();
             
         private:
             string convert(float value);
@@ -106,6 +112,12 @@ class Guetta : public QDialog
             int maxKeyPointsSIFT; 
             vector<GuettaCloud> clouds;
             bool drawKeyPoints;
+            shared_ptr<GraphManager> grapManager;
+            Eigen::Matrix4f transformation;
+            int actualIndex;
+            shared_ptr<GuettaCloud> cloudResultado;
+            shared_ptr<GuettaCloud> featuresResultado;
+            string nameCloudResultado;
 };      
 
 #endif	/* _GUETTA_H */

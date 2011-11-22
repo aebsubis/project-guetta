@@ -20,21 +20,22 @@ GuettaFeatures* GuettaFeatures::GetInstance()
 GuettaFeatures::GuettaFeatures()
 {       
 
-
 }
-    cv::Mat GuettaFeatures::cargarImagen(string nombre)
+
+cv::Mat GuettaFeatures::cargarImagen(string nombre)
+{
+    cv::Mat img = cv::imread(nombre);
+    if(img.empty())
     {
-        cv::Mat img = cv::imread(nombre);
-        if(img.empty())
-        {
-            cout << "Error: No se puede abrir la imagen" << endl;
-            exit(-1);
-        }  
-        return img;
-    }
+        cout << "Error: No se puede abrir la imagen" << endl;
+        exit(-1);
+    }  
+    return img;
+}
     
 GuettaCloud* GuettaFeatures::getSURFkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color)
 {
+    /*
     GuettaTime time;
     time.start();
     // Cargamos la imagen
@@ -59,7 +60,7 @@ GuettaCloud* GuettaFeatures::getSURFkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
         GuettaKeyPoint* point = new GuettaKeyPoint();
         // Convertimos a 3d
         // Convertimos a 3d
-        PointXYZ p3d = pc_col.at((int) keypoints[i].pt.x,(int) keypoints[i].pt.y);
+        PointXYZ p3d = cloud.at((int) keypoints[i].pt.x,(int) keypoints[i].pt.y);
         if (!( isnan(p3d.x) || isnan(p3d.y) || isnan(p3d.z)))
         {
             point->x = p3d.x;
@@ -68,7 +69,7 @@ GuettaCloud* GuettaFeatures::getSURFkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
             point->r = color.r;
             point->g = color.g;
             point->b = color.b;
-            float* descriptor = new float[128];
+            shared_array<float> descriptor (new float[128]); 
             for (int x = 0; x < 128; x++) 
             {
                 if(x >= 64)
@@ -82,14 +83,16 @@ GuettaCloud* GuettaFeatures::getSURFkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
     }
     cout << "Time surf: " << time.stop() << " ms" << endl;
     return new GuettaCloud(guettakeyPoints);
+     */
 }
 
-GuettaCloud* GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color)
+shared_ptr<GuettaCloud> GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color)
 {
     GuettaTime time;
     time.start();
     // Cargamos la imagen
     cv::Mat image = cargarImagen(imagen + ".jpg");
+    cout << "cargando imagen: " << imagen + ".jpg" << endl;
     SiftFeatureDetector detector;
     std::vector<cv::KeyPoint> keypoints;
     detector.detect(image, keypoints);
@@ -98,18 +101,18 @@ GuettaCloud* GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
     cv::Mat descriptores;
     extractor->compute(image,keypoints,descriptores);
     
-    cout << "keyPoints: " << descriptores.rows << " de " << descriptores.cols << endl;
+    cout << "keyPoints: " << descriptores.rows << endl;
 
-    PointCloud<PointXYZ> pc_col;
-    copyPointCloud(*cloud,pc_col);
+    //PointCloud<PointXYZ> pc_col;
+    //copyPointCloud(*cloud,pc_col);
 
-    vector<GuettaKeyPoint*> guettakeyPoints;
+    vector<shared_ptr<GuettaKeyPoint> > guettakeyPoints;
     //guettakeyPoints.resize(keypoints.size());
     for (int i=0; i<keypoints.size (); i = i+1)
     {
-        GuettaKeyPoint* point = new GuettaKeyPoint();
+        shared_ptr<GuettaKeyPoint> point (new GuettaKeyPoint());
         // Convertimos a 3d
-        PointXYZ p3d = pc_col.at((int) keypoints[i].pt.x,(int) keypoints[i].pt.y);
+        PointXYZRGB p3d = cloud->at((int) keypoints[i].pt.x,(int) keypoints[i].pt.y);
         if (!( isnan(p3d.x) || isnan(p3d.y) || isnan(p3d.z)))
         {
             point->x = p3d.x;
@@ -118,8 +121,7 @@ GuettaCloud* GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
             point->r = color.r;
             point->g = color.g;
             point->b = color.b;
-           
-            float* descriptor = new float[128];
+            shared_array<float> descriptor (new float[128]); 
             for (int x = 0; x < 128; x++) 
                     descriptor[x] = descriptores.at<float>(i, x);
             point->descriptor = descriptor;
@@ -128,7 +130,7 @@ GuettaCloud* GuettaFeatures::getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud
     }
     cout << "tamaño final: " << guettakeyPoints.size() << endl;
     cout << "Time sift: " << time.stop() << " ms" << endl;
-    GuettaCloud* resultado = new GuettaCloud(guettakeyPoints);
+    shared_ptr<GuettaCloud> resultado(new GuettaCloud(guettakeyPoints));
     resultado->pointCloud = resultado->getPointCloud();
     return resultado;
 }
@@ -191,6 +193,7 @@ void GuettaFeatures::projectTo3DSiftGPU(std::vector<cv::KeyPoint>& feature_locat
    */
 GuettaCloud* GuettaFeatures::getNARFkeypoints(PointCloud<PointXYZRGB>::Ptr pointCloud, RGB color)
 {
+    /*
     // Creamos la imagen de rango
     vector<GuettaKeyPoint*> keyPoints;
     
@@ -201,11 +204,11 @@ GuettaCloud* GuettaFeatures::getNARFkeypoints(PointCloud<PointXYZRGB>::Ptr point
     NarfKeypoint narf_keypoint_detector (&range_image_border_extractor);
     narf_keypoint_detector.setRangeImage (&rangeImage);
     narf_keypoint_detector.getParameters().support_size = support_size;
-    /*
+    
     narf_keypoint_detector.getParameters().add_points_on_straight_edges = true;
     narf_keypoint_detector.getParameters().max_no_of_interest_points = 50;
     narf_keypoint_detector.getParameters().no_of_polynomial_approximations_per_point = false;
-    narf_keypoint_detector.getParameters().optimal_range_image_patch_size = 15;*/
+    narf_keypoint_detector.getParameters().optimal_range_image_patch_size = 15;
     //narf_keypoint_detector.getParameters().
     //narf_keypoint_detector.getParameters ().distance_for_additional_points = 2.9;
 //narf_keypoint_detector.getParameters().
@@ -250,7 +253,7 @@ GuettaCloud* GuettaFeatures::getNARFkeypoints(PointCloud<PointXYZRGB>::Ptr point
             (abs(keyPoints[iterKeyPoints]->z - narf_descriptors[iterDescriptors].z)<epsilon))
         {
             //keyPoints[iterKeyPoints].descriptor = narf_descriptors[iterDescriptors].descriptor;
-            float* descriptor128 = new float[128];
+            shared_array<float> descriptor128 (new float[128]); 
             for(int i=0; i<128; i++)
             {
                 if(i<36)
@@ -273,6 +276,7 @@ GuettaCloud* GuettaFeatures::getNARFkeypoints(PointCloud<PointXYZRGB>::Ptr point
     }
    
     return new GuettaCloud(keyPoints);
+   */
 }
 
 RangeImage GuettaFeatures::createRangeImage(PointCloud<PointXYZRGB>::Ptr cloud)

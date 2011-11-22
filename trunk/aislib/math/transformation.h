@@ -19,6 +19,11 @@
 #include "rotation_matrix.h"
 #include "angle.h"
 #include "quaternion.h"
+
+//typedef _Quaternion<double> Quaterniond;
+
+
+
 #include "axis_angle.h"
 
 /** @addtogroup math **/
@@ -111,6 +116,9 @@ struct _Transformation {
   RotationType    _rotation;
 };
 
+typedef _Quaternion<float>  Quaternionf;
+typedef _Quaternion<double>  Quaterniondd;
+
 typedef _Transformation< RotationMatrix2f> _Transformation2rf;
 typedef _Transformation< Anglef> _Transformation2f;
 typedef _Transformation< RotationMatrix2> _Transformation2r;
@@ -120,7 +128,7 @@ typedef _Transformation< RotationMatrix3f> Transformation3rf;
 typedef _Transformation< Quaternionf>      Transformation3f;
 typedef _Transformation< AxisAnglef>       Transformation3af;
 
-typedef _Transformation< Quaternion>      Transformation3;
+typedef _Transformation< Quaterniondd>      Transformation3;
 typedef _Transformation< RotationMatrix3> Transformation3r;
 typedef _Transformation< AxisAngle>       Transformation3a;
 

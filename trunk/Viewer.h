@@ -34,8 +34,8 @@ class Viewer : public QGLViewer
       virtual void drawWithNames();
       
     public:
-        vector<GuettaCloud*> selectables;
-        vector<GuettaCloud*> unselectables;
+        vector<shared_ptr<GuettaCloud> > selectables;
+        vector<shared_ptr<GuettaCloud> > unselectables;
         qglviewer::Vec orig, dir, selectedPoint;
         
     signals:

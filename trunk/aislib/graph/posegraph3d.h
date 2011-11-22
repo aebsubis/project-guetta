@@ -128,7 +128,8 @@ namespace AISNavigation {
       manifold[0] = p.translation().x();
       manifold[1] = p.translation().y();
       manifold[2] = p.translation().z();
-      const Quaternion& q = p.rotation();
+      const Quaterniondd& q = p.rotation();
+      
       double nv = std::sqrt(q.x()*q.x() + q.y()*q.y() + q.z()*q.z());
       if (nv  > 1e-12) {
         double s = 2 * acos(q.w()) / nv;
@@ -159,7 +160,7 @@ namespace AISNavigation {
   template <> 
   struct PoseUpdate<PoseGraph3D> {
     typedef PoseGraph3D PG;
-    static Quaternion manifoldQuat(PG::TransformationVectorType::BaseType* v)
+    static Quaterniondd manifoldQuat(PG::TransformationVectorType::BaseType* v)
     { // create Quaternion out of the axis - axis-length representation
       double n = std::sqrt(v[3]*v[3] + v[4]*v[4] + v[5]*v[5]);
       if (n > 1e-20) {
@@ -169,10 +170,10 @@ namespace AISNavigation {
         double qx = v[3] * s;
         double qy = v[4] * s;
         double qz = v[5] * s;
-        return Quaternion(qx, qy, qz, qw);
+        return Quaterniondd(qx, qy, qz, qw);
       } else {
         //return Quaternion(0.5*v[3], 0.5*v[4], 0.5*v[5]);
-        return Quaternion(0, 0, 0, 1);
+        return Quaterniondd(0, 0, 0, 1);
       }
     }
     void operator()(PG::TransformationType& t, PG::TransformationVectorType::BaseType* update)
@@ -180,7 +181,8 @@ namespace AISNavigation {
       t.translation()[0] += update[0];
       t.translation()[1] += update[1];
       t.translation()[2] += update[2];
-      t.rotation() *= manifoldQuat(update);
+      t.rotation() = t.rotation() * manifoldQuat(update);
+      //t.rotation() *= manifoldQuat(update);
     }
   };
 

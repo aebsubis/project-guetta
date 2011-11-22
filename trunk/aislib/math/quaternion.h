@@ -60,12 +60,8 @@ template <typename Base=double>
   _Quaternion(const _Vector<4, Base>& v);
 };
 
-typedef _Quaternion<double> Quaternion;
-typedef _Quaternion<float>  Quaternionf;
-
 //@}
 
-#include "quaternion.hpp"
 
  
 #endif
