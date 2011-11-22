@@ -7,7 +7,7 @@ GuettaCloud::GuettaCloud()
 {
 }
 
-GuettaCloud::GuettaCloud(vector<GuettaKeyPoint*> data)
+GuettaCloud::GuettaCloud(vector<shared_ptr<GuettaKeyPoint> > data)
 {
     this->data = data;
 }
@@ -19,12 +19,6 @@ GuettaCloud::GuettaCloud(const GuettaCloud& guettaCloud)
 
 GuettaCloud::~GuettaCloud()
 {
-    //cout << "tam: " << data.size() << endl;
-    for(int i = 0; i < data.size(); i++)
-    {
-        if(data[i] != NULL)
-                delete data[i]; 
-    }
 }
 
 GuettaCloud::GuettaCloud(PointCloud<PointXYZRGB>::Ptr cloud)
@@ -33,10 +27,9 @@ GuettaCloud::GuettaCloud(PointCloud<PointXYZRGB>::Ptr cloud)
     for(int i = 0; i < cloud->points.size(); i++)
     {
         PointXYZRGB point = cloud->points[i];
-        data[i] = new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b,NULL);
+        shared_array<float> descriptor;
+        data[i] = shared_ptr<GuettaKeyPoint>(new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b, descriptor));
     }
-    //PointCloud<PointXYZ>::Ptr key3DCloud (new PointCloud<PointXYZ>);
-    //copyPointCloud(*cloud,*pointCloud);
     pointCloud = cloud;
 }
 
@@ -45,7 +38,7 @@ PointCloud<PointXYZRGB>::Ptr GuettaCloud::getPointCloud()
      PointCloud<PointXYZRGB>::Ptr pointCloud (new PointCloud<PointXYZRGB>);
     for(int i = 0; i < data.size(); i++)
     {
-        GuettaKeyPoint* guettaPoint = data[i];
+        shared_ptr<GuettaKeyPoint> guettaPoint = data[i];
         PointXYZRGB point;
         point.x = guettaPoint->x;
         point.y = guettaPoint->y;

@@ -90,6 +90,7 @@ void GuettaCapture::capture() {
 
 void GuettaCapture::cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr &cloud)
 {
+    /*
     mutex::scoped_lock lock (mtx_);
     cout << "Inicio captura" << endl;
     //delete viewers[0]->unselectables[0];
@@ -108,6 +109,9 @@ void GuettaCapture::cloud_cb_ (const PointCloud<PointXYZRGB>::ConstPtr &cloud)
        guardarXYZ = false;
     }
     cout << "Finalizo capatura" << endl;
+     */
+    
+    
     /*
     this_thread::sleep(posix_time::milliseconds(1));
     fps++;

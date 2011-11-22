@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -386,7 +386,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>comedor</string>
+      <string>sala</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_seleccionarDirectorio">
@@ -466,7 +466,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>3</string>
+      <string>6</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_13">
@@ -562,6 +562,67 @@
      </property>
      <property name="text">
       <string>mostrar keyPoints</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_6">
+    <attribute name="title">
+     <string>tab3</string>
+    </attribute>
+    <widget class="QWidget" name="gridLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>661</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>700</x>
+       <y>20</y>
+       <width>661</width>
+       <height>491</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="pushButton_siguiente">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>530</y>
+       <width>97</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Siguiente</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_info">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>530</y>
+       <width>161</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>mostrarInformacion</string>
      </property>
     </widget>
    </widget>

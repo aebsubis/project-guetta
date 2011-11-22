@@ -6,6 +6,7 @@
  */
 
 #include <qt4/QtCore/qthread.h>
+#include <qt4/QtNetwork/qlocalsocket.h>
 
 #include "Guetta.h"
 
@@ -16,10 +17,10 @@ Guetta::Guetta() {
         p->create();
         p->makeCurrent();
       */ 
-        cout << "holaaaa" << endl;
+
     // Creamos los visualizadores
-    viewers.resize(5);
-    for(int i = 0; i < 5; i++)
+    viewers.resize(7);
+    for(int i = 0; i < 7; i++)
         viewers[i] = new Viewer(this,i);
     
       
@@ -42,6 +43,8 @@ Guetta::Guetta() {
       
     connect(widget.checkBox_showKeypoints,SIGNAL(clicked()),this,SLOT(changeShowKeypoints()));
     
+    connect(widget.pushButton_siguiente,SIGNAL(clicked()),this,SLOT(siguiente()));
+    connect(widget.pushButton_info,SIGNAL(clicked()),this,SLOT(mostrarInformacion()));
     
     //connect(widget.comboBox1,SIGNAL(currentIndexChangeg(QString),this,SLOT(changeCloud1
     maxDistanceSIFT = 20000;
@@ -63,7 +66,8 @@ Guetta::Guetta() {
     previousPoint = NULL;
     // Cargamos todas las nubes
 
-    loadClouds();
+    
+    //loadClouds();
     
 
     
@@ -75,10 +79,14 @@ Guetta::Guetta() {
     widget.gridLayout_2->addWidget(viewers[4],0,0);
     
     widget.gridLayout_3->addWidget(new GuettaCapture());
+
+    widget.gridLayout_4->addWidget(viewers[5],0,0);
+    widget.gridLayout_5->addWidget(viewers[6],0,0);
     
     cloud1 = "cloud0";
     cloud2 = "cloud1";
-
+    actualIndex = -1;
+    /*
     viewers[0]->unselectables.insert(viewers[0]->unselectables.end(),new GuettaCloud(pclClouds[cloud1]));
     viewers[1]->unselectables.insert(viewers[1]->unselectables.end(),new GuettaCloud(pclClouds[cloud2]));
     
@@ -99,12 +107,12 @@ Guetta::Guetta() {
     viewers[3]->unselectables.insert(viewers[3]->unselectables.end(),icp);
     viewers[3]->unselectables.insert(viewers[3]->unselectables.end(),viewers[2]->selectables[0]);
     
-
+     */
     widget.tableWidget_clouds->setRowCount(60);
   drawKeyPoints = false;
 
-
-
+    grapManager = shared_ptr<GraphManager>(new GraphManager());
+    loadClouds(widget.lineEdit_directorio->text().toStdString());
 }
 
 void Guetta::changeShowKeypoints()
@@ -182,58 +190,64 @@ int Guetta::getNextCloud(int actualIndex)
 void Guetta::seleccionarDirectorio()
 {
     // Cargamos todos los clouds del directorio
-    loadClouds(widget.lineEdit_directorio->text().toStdString());
+    //loadClouds(widget.lineEdit_directorio->text().toStdString());
 }
 
-void Guetta::procesarClouds()
+void Guetta::mostrarInformacion()
 {
-    cout << "Procesando clouds" << endl;
+    grapManager->mostrarInformacion();
+}
 
-    // Eliminamos los clouds anteriores
-    for(int i = 0; i < viewers[4]->unselectables.size(); i++)
-    {
-        if(viewers[4]->unselectables[i] != NULL)
-                delete viewers[4]->unselectables[i];
-    }
-    viewers[4]->unselectables.clear();
-    
-     for(int i = 0; i < viewers[4]->selectables.size(); i++)
-    {
-        if(viewers[4]->selectables[i] != NULL)
-                delete viewers[4]->selectables[i];
-    }
-    viewers[4]->selectables.clear();
-    
+void Guetta::siguiente()
+{
     string prefijo = widget.lineEdit_directorio->text().toStdString() + "/";
-    int actualIndex = -1;
+    int total = widget.lineEdit_total->text().toInt();
     actualIndex = getNextCloud(actualIndex);
-    
-    string nameCloud1 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
-    GuettaCloud* cloud1 = new GuettaCloud(pclClouds[nameCloud1]);
-    
-    actualIndex = getNextCloud(actualIndex);
-    string nameCloud2 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
-    GuettaCloud* cloud2 = new GuettaCloud(pclClouds[nameCloud2]);
-    
-    GuettaCloud* features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud1],prefijo+nameCloud1,RGB(1,0,0));
-    GuettaCloud* features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud2],prefijo+nameCloud2,RGB(0,1,0));
-    Eigen::Matrix4f transformation = emparejar(true,cloud1,cloud2,features1,features2);
-    
-    GuettaCloud* cloudResultado = transform(cloud2, transformation);
-    GuettaCloud* featuresResultado = transform(features2, transformation);
-  
-    if(drawKeyPoints == false)
+            string nameCloud1, nameCloud2;
+        shared_ptr<GuettaCloud> features1;
+        shared_ptr<GuettaCloud> features2;
+        shared_ptr<GuettaCloud> cloud1;
+        shared_ptr<GuettaCloud> cloud2 ;
+        
+    if(actualIndex < total && actualIndex != -1)
     {
-        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloud1);
-        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
-    }
-    else
-    {
-        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),features1);
-        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
-    }
     
-    cout << transformation << endl;
+        if(actualIndex == 0)
+        {
+            nameCloud1 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
+            actualIndex = getNextCloud(actualIndex);
+            nameCloud2 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();  
+            
+            cloud1 = shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[nameCloud1]));
+            cloud2 = shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[nameCloud2]));
+    
+           
+            
+            features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud1],prefijo+nameCloud1,RGB(1,0,0));
+            features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud2],prefijo+nameCloud2,RGB(0,1,0));
+
+            shared_ptr<Node> node (new Node(cloud1,cloud1,features1));
+            
+            grapManager->addNode(node);
+             viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),features1);
+            // viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloud1);
+        }
+        else
+        {
+            nameCloud1 = nameCloudResultado;
+            nameCloud2 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();  
+            features1 = featuresResultado; 
+            features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud2],prefijo+nameCloud2,RGB(0,0,0.9));
+            cloud1 = cloudResultado;
+            cloud2 = shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[nameCloud2]));
+     
+        }
+        cout << "Analizando " + nameCloud1 << " y " + nameCloud2 << endl;
+        shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
+        shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
+        Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
+        cout << "transformacion guetta: " << endl;
+        cout << transformation << endl;
     double roll = atan2(transformation(2,1),transformation(2,2));
     double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
     double yaw = atan2(transformation(1,0),transformation(0,0));
@@ -241,7 +255,118 @@ void Guetta::procesarClouds()
     pitch = pitch/M_PI*180;
     yaw = yaw/M_PI*180;
     double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
-    cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
+    cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;  
+    
+        cloudResultado = transform(cloud2, transformation);
+        featuresResultado = transform(features2, transformation);
+        shared_ptr<GuettaCloud> cloudNearest2Transformed = transform(cloudNearest2, transformation);
+        nameCloudResultado = nameCloud2;
+        
+        shared_ptr<Node> node (new Node(cloud2,cloudNearest2Transformed,features2,transformation));
+        grapManager->addNode(node);
+        
+        //viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),featuresResultado);
+        //viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloudResultado);
+        
+    }
+    
+    // Actualizamos el viewer 6
+    if(grapManager->update)
+    {
+        cout << "Actualizando todo" << endl;
+        grapManager->update = false;
+        viewers[6]->unselectables.clear();
+        map<int,shared_ptr<Node> >::iterator it;
+        for (it = grapManager->graph.begin(); it != grapManager->graph.end(); it++) 
+        {
+            shared_ptr<Node> node = it->second;
+
+            //grapManager->getOptimizedTransformation(it->first)
+            shared_ptr<GuettaCloud> cloud = transform(node->getCloud(), grapManager->getOptimizedTransformation(it->first));
+            // viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
+
+            PointCloud<PointXYZRGB>::Ptr cloud_filtered (new PointCloud<PointXYZRGB>);
+
+            VoxelGrid<PointXYZRGB> sor;
+
+            //cout << "point: "<< cloud->getPointCloud()->points.size() << endl;
+            
+            PointCloud<PointXYZRGB>::Ptr aux = cloud->getPointCloud();
+            aux->is_dense =  false;
+
+            sor.setInputCloud (aux);
+
+            sor.setLeafSize (0.1f, 0.1f, 0.1f);
+            sor.filter (*cloud_filtered);
+
+            shared_ptr<GuettaCloud> cloudMostrar (new GuettaCloud(cloud_filtered));
+            viewers[6]->unselectables.insert(viewers[6]->unselectables.end(),cloudMostrar);
+        }
+        
+        Eigen::Matrix4f nuevaTransformation = grapManager->getOptimizedTransformation(grapManager->graph.size()-1);
+        cloudResultado = transform(cloud2, nuevaTransformation);
+        featuresResultado = transform(features2, nuevaTransformation);
+    }
+    else
+    {
+        
+        cout << "añadiendo ultima todo" << endl;
+        //shared_ptr<GuettaCloud> cloud = transform(cloud2, grapManager->getOptimizedTransformation(grapManager->graph.end()));
+              PointCloud<PointXYZRGB>::Ptr cloud_filtered (new PointCloud<PointXYZRGB>);
+
+            VoxelGrid<PointXYZRGB> sor;
+
+            //cout << "point: "<< cloud->getPointCloud()->points.size() << endl;
+            PointCloud<PointXYZRGB>::Ptr aux = cloudResultado->getPointCloud();
+            aux->is_dense =  false;
+
+            sor.setInputCloud (aux);
+
+            sor.setLeafSize (0.1f, 0.1f, 0.1f);
+            sor.filter (*cloud_filtered);
+            shared_ptr<GuettaCloud> cloudMostrar (new GuettaCloud(cloud_filtered));
+        viewers[6]->unselectables.insert(viewers[6]->unselectables.end(),cloudMostrar);
+        //viewers[6]->unselectables.insert(viewers[6]->unselectables.end(),clo);
+    }
+    
+    /*
+    shared_ptr<GuettaCloud> cloud1 (new GuettaCloud(pclClouds[nameCloud1]));
+  
+    actualIndex = getNextCloud(actualIndex);
+    string nameCloud2 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
+    cout << "Analizando " + nameCloud1 << " y " + nameCloud2 << endl;
+    shared_ptr<GuettaCloud> cloud2 (new GuettaCloud(pclClouds[nameCloud2]));
+    
+    shared_ptr<GuettaCloud> features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud1],prefijo+nameCloud1,RGB(1,0,0));
+    shared_ptr<GuettaCloud> features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud2],prefijo+nameCloud2,RGB(0,1,0));
+    shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
+    shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
+    Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
+
+    shared_ptr<GuettaCloud> cloudResultado = transform(cloud2, transformation);
+    shared_ptr<GuettaCloud> featuresResultado = transform(features2, transformation);
+    shared_ptr<GuettaCloud> cloudNearest2Transformed = transform(cloudNearest2, transformation);
+    
+    viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloud1);
+    viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloudResultado);   
+    Eigen::Matrix4f aux;
+    shared_ptr<Node> node (new Node(cloud1,cloudNearest1,features1,aux));
+    grapManager->addNode(node);
+    
+    shared_ptr<Node> node1 (new Node(cloudResultado,cloudNearest2Transformed,featuresResultado,transformation));
+    grapManager->addNode(node1);
+   // grapManager->optimizeGraph();
+    /*
+      cout << transformation << endl;
+    double roll = atan2(transformation(2,1),transformation(2,2));
+    double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+    double yaw = atan2(transformation(1,0),transformation(0,0));
+    roll = roll/M_PI*180;
+    pitch = pitch/M_PI*180;
+    yaw = yaw/M_PI*180;
+    double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+    cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;  
+    
     
     int total = widget.lineEdit_total->text().toInt();
     for(int i = 2; i < total; i++)
@@ -255,9 +380,13 @@ void Guetta::procesarClouds()
 
         features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud],prefijo+nameCloud,RGB(0,0,0.9));
         cloud1 = cloudResultado;
-        cloud2 = new GuettaCloud(pclClouds[nameCloud]);
         
-        transformation = emparejar(true,cloud1,cloud2,features1,features2);
+        cloud2 = shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[nameCloud]));
+        
+        shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
+        shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
+        Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
+        
         
         cout << transformation << endl;
         double roll = atan2(transformation(2,1),transformation(2,2));
@@ -268,11 +397,131 @@ void Guetta::procesarClouds()
         yaw = yaw/M_PI*180;
         double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
         cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
-    
+        
+        
         cloudResultado = transform(cloud2, transformation);
         featuresResultado = transform(features2, transformation);
+        
+        //shared_ptr<GuettaCloud> features = transform(cloudNearest2, transformation);
+        cloudNearest2Transformed = transform(cloudNearest2, transformation);
+        
+        shared_ptr<Node> node (new Node(cloudResultado,cloudNearest2Transformed,featuresResultado,transformation));
+        grapManager->addNode(node);
+
+        viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloudResultado);
+        
+    }
+     * */
+    viewers[5]->updateGL();
+    viewers[6]->updateGL();
+}
+
+void Guetta::procesarClouds()
+{
+    GuettaTime timer;
+    timer.start();
+    cout << "Procesando clouds" << endl;
+    grapManager->clear();
+    // Elimnamos los clouds anteriores
+    viewers[4]->unselectables.clear();
+    
+    string prefijo = widget.lineEdit_directorio->text().toStdString() + "/";
+    int actualIndex = -1;
+    actualIndex = getNextCloud(actualIndex);
+
+    string nameCloud1 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
+
+    shared_ptr<GuettaCloud> cloud1 (new GuettaCloud(pclClouds[nameCloud1]));
+  
+    actualIndex = getNextCloud(actualIndex);
+    string nameCloud2 = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
+    shared_ptr<GuettaCloud> cloud2 (new GuettaCloud(pclClouds[nameCloud2]));
+    
+    shared_ptr<GuettaCloud> features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud1],prefijo+nameCloud1,RGB(1,0,0));
+    shared_ptr<GuettaCloud> features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud2],prefijo+nameCloud2,RGB(0,1,0));
+    shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
+    shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
+    Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
+
+    shared_ptr<GuettaCloud> cloudResultado = transform(cloud2, transformation);
+    shared_ptr<GuettaCloud> featuresResultado = transform(features2, transformation);
+    shared_ptr<GuettaCloud> cloudNearest2Transformed = transform(cloudNearest2, transformation);
+    /*
+    shared_ptr<Node> node (new Node(cloud1,cloudNearest1,features1));
+    grapManager->addNode(node);
+    
+    shared_ptr<Node> node1 (new Node(cloudResultado,cloudNearest2Transformed,featuresResultado));
+    //shared_ptr<Node> node1 (new Node(cloudResultado,cloudNearest1,featuresResultado));
+    grapManager->addNode(node1);
+    */
+    if(drawKeyPoints == false)
+    {
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloud1);
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
+    }
+    else
+    {
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),features1);
+        viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
+    }
+    /*
+    cout << transformation << endl;
+    double roll = atan2(transformation(2,1),transformation(2,2));
+    double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+    double yaw = atan2(transformation(1,0),transformation(0,0));
+    roll = roll/M_PI*180;
+    pitch = pitch/M_PI*180;
+    yaw = yaw/M_PI*180;
+    double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+    cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
+    */
+    int total = widget.lineEdit_total->text().toInt();
+    for(int i = 2; i < total; i++)
+    {
+        actualIndex = getNextCloud(actualIndex);
+        if(actualIndex == -1)
+            break;
+        string nameCloud = widget.tableWidget_clouds->item(actualIndex,1)->text().toStdString();
+        features1 = featuresResultado; 
+        float aux = (rand() % 255)/255.0;
+
+        features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud],prefijo+nameCloud,RGB(0,0,0.9));
+        cloud1 = cloudResultado;
+        
+        cloud2 = shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[nameCloud]));
+        
+        shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
+        shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
+        Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
+        
+        /*
+        cout << transformation << endl;
+        double roll = atan2(transformation(2,1),transformation(2,2));
+        double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+        double yaw = atan2(transformation(1,0),transformation(0,0));
+        roll = roll/M_PI*180;
+        pitch = pitch/M_PI*180;
+        yaw = yaw/M_PI*180;
+        double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+        cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
+        */
+        
+        cloudResultado = transform(cloud2, transformation);
+        featuresResultado = transform(features2, transformation);
+        
+        //shared_ptr<GuettaCloud> features = transform(cloudNearest2, transformation);
+        cloudNearest2Transformed = transform(cloudNearest2, transformation);
+        
+        //shared_ptr<Node> node (new Node(cloudResultado,cloudNearest2Transformed,featuresResultado));
+
+        //grapManager->addNode(node);
         if(drawKeyPoints == false)
         {
+            viewers[0]->selectables.clear();
+            viewers[1]->selectables.clear();
+            
+            viewers[0]->selectables.insert(viewers[0]->selectables.end(),cloudNearest1);
+            viewers[1]->selectables.insert(viewers[1]->selectables.end(),cloudNearest2);
             viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),cloudResultado);
         }
         else
@@ -280,27 +529,25 @@ void Guetta::procesarClouds()
             viewers[4]->unselectables.insert(viewers[4]->unselectables.end(),featuresResultado);
         }
         
-        //delete cloud1;
-        delete cloud2;
-        //delete features1;
-        //delete features2;
     }
+    cout << "tiempo total: " << timer.stop() << " ms" << endl;
+    viewers[4]->updateGL();
 }
 
-GuettaCloud* Guetta::transform(GuettaCloud* guettaCloud, Eigen::Matrix4f transformation_matrix)
+shared_ptr<GuettaCloud> Guetta::transform(shared_ptr<GuettaCloud> guettaCloud, Eigen::Matrix4f transformation_matrix)
 {
     PointCloud<PointXYZRGB>::Ptr cloudTransformed (new PointCloud<PointXYZRGB>);
     transformPointCloud (*guettaCloud->getPointCloud(), *cloudTransformed, transformation_matrix);  
-    GuettaCloud* resultado = new GuettaCloud(cloudTransformed);
+    shared_ptr<GuettaCloud> resultado(new GuettaCloud(cloudTransformed));
     
     for(int i = 0; i < resultado->data.size(); i++)
     {
-        GuettaKeyPoint* guettaPoint = resultado->data[i];
-        GuettaKeyPoint* original = guettaCloud->data[i];
+        shared_ptr<GuettaKeyPoint> guettaPoint = resultado->data[i];
+        shared_ptr<GuettaKeyPoint> original = guettaCloud->data[i];
         
         if(original->descriptor != NULL)
         {
-            guettaPoint->descriptor = new float[128];
+            guettaPoint->descriptor = shared_array<float>(new float[128]); 
             for(int i = 0; i < 128; i++)
                 guettaPoint->descriptor[i] = original->descriptor[i];
         }
@@ -309,23 +556,56 @@ GuettaCloud* Guetta::transform(GuettaCloud* guettaCloud, Eigen::Matrix4f transfo
     return resultado;
 }
 
-Eigen::Matrix4f Guetta::emparejar(bool pintar, GuettaCloud* cloud1, GuettaCloud* cloud2, GuettaCloud* features1, GuettaCloud* features2)
+Eigen::Matrix4f Guetta::emparejar(bool pintar, shared_ptr<GuettaCloud> features1, shared_ptr<GuettaCloud> features2, shared_ptr<GuettaCloud> cloudNearest1, shared_ptr<GuettaCloud> cloudNearest2)
 {
+    
     GuettaICP* guettaIcp = GuettaICP::GetInstance();
     guettaIcp->setInputTarget(features2);
     guettaIcp->setInputCloud(features1);
 
     // Mostramos los descrptiores seleccionados
-    GuettaCloud* guettaCloud1 = new GuettaCloud();
-    GuettaCloud* guettaCloud2 = new GuettaCloud();
+    shared_ptr<GuettaCloud> guettaCloud1 (new GuettaCloud());
+    shared_ptr<GuettaCloud> guettaCloud2 (new GuettaCloud());
     guettaIcp->getNearestDescriptors(maxKeyPointsAlineamientoSIFT,maxDistanceSIFT,guettaCloud1,guettaCloud2);
 
+    
     GuettaTime timer;
     timer.start();
     Ramsac ramsac(guettaCloud1,guettaCloud2);
     ramsac.compute(0,"");
 
     cout << "menorDistancia: " << ramsac.menorDistancia << endl;
+    
+    //if(ramsac.menorDistancia < 0.01)
+    //    return NULL;
+    
+    if(ramsac.menorDistancia < 0.1)
+    {
+        // Insertamos únicamente los inliers
+        for(int i = 0; i < ramsac.mejorCombinacion.size(); i++)
+        {
+            cloudNearest1->data.insert(cloudNearest1->data.end(),guettaCloud1->data[ramsac.mejorCombinacion[i]]);
+            cloudNearest2->data.insert(cloudNearest2->data.end(),guettaCloud2->data[ramsac.mejorCombinacion[i]]);
+        }
+    }
+    
+    //for(int i = 0; i < cloudNearest1->data.size(); i++)
+    //{
+        
+    //}
+    
+    /*
+    vector<int>::iterator it;
+    for(it = cloudNearest1->data.begin(); it != cloudNearest1->data.end(); i++)
+    {
+        
+    }*/
+    
+    //for(int i = 0; i < ramsac.mejorCombinacion.size(); i++)
+    //{
+        //cloudNearest1->data.erase(cloudNearest1);
+    //}
+    
     cout << "tiempo ramsac: " << timer.stop() << " ms" << endl;  
 
     return ramsac.transformacion;  
@@ -333,26 +613,18 @@ Eigen::Matrix4f Guetta::emparejar(bool pintar, GuettaCloud* cloud1, GuettaCloud*
 
 void Guetta::changeCloud1(QString cloud)
 {
-    
-    if(viewers[0]->unselectables.size() > 0)
-    {
-        cloud1 = cloud.toStdString();
-    viewers[0]->unselectables[0] = new GuettaCloud(pclClouds[cloud.toStdString()]);  
+    cloud1 = cloud.toStdString();
+    viewers[0]->unselectables.clear();
+    viewers[0]->unselectables.insert(viewers[0]->unselectables.end(),shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[cloud.toStdString()])));  
     viewers[0]->updateGL();
-    }
 }
 
 void Guetta::changeCloud2(QString cloud)
 {
-    
-     //viewPorts[1]->setPclCloud(pclClouds[cloud.toStdString()]);
-    if(viewers[1]->unselectables.size() > 0)
-    {
-         cloud2 = cloud.toStdString();
-     viewers[1]->unselectables[0] = new GuettaCloud(pclClouds[cloud.toStdString()]);  
-       
-    viewers[1]->updateGL();  
-    }
+    cloud2 = cloud.toStdString();
+    viewers[1]->unselectables.clear();
+    viewers[1]->unselectables.insert(viewers[1]->unselectables.end(),shared_ptr<GuettaCloud>(new GuettaCloud(pclClouds[cloud.toStdString()])));  
+    viewers[1]->updateGL();
 }
 
 void Guetta::changeAcumular()
@@ -363,8 +635,9 @@ void Guetta::changeAcumular()
 void Guetta::changeKeyPointMethod()
 {
     float maxDistance = 0;
-    GuettaCloud* features1;
-    GuettaCloud* features2;
+    /*
+    shared_ptr<GuettaCloud> features1;
+    shared_ptr<GuettaCloud> features2;
     if(widget.radioButton_sift->isChecked())
     {
         // Sift
@@ -375,21 +648,67 @@ void Guetta::changeKeyPointMethod()
     }
     if(widget.radioButton_narf->isChecked())
     {    
+        
         // Narf
         cout << "narf" << endl;
         features1 = GuettaFeatures::GetInstance()->getNARFkeypoints(pclClouds[cloud1],RGB(1,0,0));
         features2 = GuettaFeatures::GetInstance()->getNARFkeypoints(pclClouds[cloud2],RGB(0,1,0));
+        
     }
     if(widget.radioButton_surf->isChecked())
     {       
+        
         // Surf
         cout << "surf" << endl;
         features1 = GuettaFeatures::GetInstance()->getSURFkeypoints(pclClouds[cloud1],cloud1,RGB(1,0,0));
         features2 = GuettaFeatures::GetInstance()->getSURFkeypoints(pclClouds[cloud2],cloud2,RGB(0,1,0));   
         maxDistance = maxDistanceSURF;
+         
     }
+    */
+    viewers[0]->selectables.clear();
+    viewers[1]->selectables.clear();
+    viewers[2]->selectables.clear();
+    viewers[3]->unselectables.clear();
     
+    string prefijo = widget.lineEdit_directorio->text().toStdString() + "/";
+    shared_ptr<GuettaCloud> guettaCloud1 (new GuettaCloud(pclClouds[cloud1]));
+    shared_ptr<GuettaCloud> guettaCloud2 (new GuettaCloud(pclClouds[cloud2]));
+    shared_ptr<GuettaCloud> features1 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[cloud1],prefijo+cloud1,RGB(1,0,0));
+    shared_ptr<GuettaCloud> features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[cloud2],prefijo+cloud2,RGB(0,1,0));
+    shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
+    shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
+
+    Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
+ 
+    shared_ptr<GuettaCloud> cloudResultado = transform(guettaCloud2, transformation);
+    shared_ptr<GuettaCloud> featuresResultado = transform(features2, transformation);
+    shared_ptr<GuettaCloud> cloudNearest2Transformed = transform(cloudNearest2, transformation);
+  
+        cout << transformation << endl;
+         double roll = atan2(transformation(2,1),transformation(2,2));
+        double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+        double yaw = atan2(transformation(1,0),transformation(0,0));
+        roll = roll/M_PI*180;
+        pitch = pitch/M_PI*180;
+        yaw = yaw/M_PI*180;
+        double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+        cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
+        
+    viewers[0]->selectables.insert(viewers[0]->selectables.end(),features1);
+    viewers[1]->selectables.insert(viewers[1]->selectables.end(),features2);
+    //viewers[0]->selectables.insert(viewers[0]->selectables.end(),cloudNearest1);
+    //viewers[1]->selectables.insert(viewers[1]->selectables.end(),cloudNearest2);
+    viewers[2]->selectables.insert(viewers[2]->selectables.end(),cloudNearest1);
+    viewers[2]->selectables.insert(viewers[2]->selectables.end(),cloudNearest2Transformed);   
+    viewers[3]->unselectables.insert(viewers[3]->unselectables.end(),guettaCloud1);
+    viewers[3]->unselectables.insert(viewers[3]->unselectables.end(),cloudResultado);
     
+    viewers[0]->updateGL();
+    viewers[1]->updateGL();
+    viewers[2]->updateGL();
+    viewers[3]->updateGL();
+    /*
     GuettaICP* guettaIcp = GuettaICP::GetInstance();
     guettaIcp->setInputTarget(features2);
     guettaIcp->setInputCloud(features1);
@@ -436,10 +755,12 @@ void Guetta::changeKeyPointMethod()
     viewers[1]->updateGL();
     viewers[2]->updateGL();    
     viewers[3]->updateGL(); 
+     */
 }
 
 void Guetta::selectedKeyPoint(int idPoint, int idViewport)
 {
+    /*
     string keyPoint = "";
 
     GuettaCloud* cloud = viewers[idViewport]->selectables[0];
@@ -495,7 +816,7 @@ void Guetta::selectedKeyPoint(int idPoint, int idViewport)
     vector<int> nearest = point->getNearestDescriptor(cloud2->data);
     
     viewers[idViewport2]->updateGL();
-
+     */
 }
 
 string Guetta::convert(float value)
@@ -508,6 +829,93 @@ string Guetta::convert(float value)
 
 void Guetta::loadClouds(string path)
 {
+    QLocalSocket* socket = new QLocalSocket();
+    socket->connectToServer("servidorDoraemon");
+    cout << "Cargando clouds" << endl;
+    if(socket->isOpen())
+    {
+        //cout << "Conectado" << endl;
+        GuettaTime timer;
+        timer.start();
+        QStringList listClouds;
+        int clouds = 30;//16; //23;
+        
+        for(int i = 0; i < clouds; i++)
+        {
+
+            QDataStream in(socket);
+            in.setVersion(QDataStream::Qt_4_0);
+            //cout << "bytes: " << socket->bytesAvailable() << endl;
+            while (socket->bytesAvailable() < 4*1843200)
+            {
+                //cout << socket->bytesAvailable() << endl;
+                socket->waitForReadyRead(10);
+            }
+        
+            //cout << "available: " << socket->bytesAvailable() << endl;
+            
+            
+            QVector<float> vector;
+            in >> vector;
+            
+            //cout << "size: " << vector.size() << endl;
+            //cout << "1843100:" << vector[1843195] << endl;
+          
+            PointCloud<PointXYZRGB>::Ptr pointCloud (new PointCloud<PointXYZRGB>);
+            for(int j = 0; j < vector.size(); j += 6)
+            {
+                PointXYZRGB point;
+                point.x = vector[j];
+                
+                point.y = vector[j+1];
+                point.z = vector[j+2];
+                point.r = vector[j+3];
+                point.g = vector[j+4];
+                point.b = vector[j+5];    
+                
+                pointCloud->points.push_back (point);               
+            }
+            //cout << "puntos: " << pointCloud->points.size() << endl;
+            pointCloud->width = 640;
+            pointCloud->height = 480;
+            pointCloud->is_dense = true;
+            //cout << "final available: " << socket->bytesAvailable() << endl;
+             string name = "test_RGB_" + boost::lexical_cast<std::string>(i);
+             cout << "Cargando " << name << endl;
+             pclClouds[name] = pointCloud;
+             listClouds.append(QString::fromStdString(name));
+             
+                 QTableWidgetItem *item1 = new QTableWidgetItem(QString::fromStdString(name));
+        widget.tableWidget_clouds->setItem(i, 1, item1);
+        QCheckBox* item2 = new QCheckBox();
+        QTableWidgetItem *item = new QTableWidgetItem(1);
+        item->data(Qt::CheckStateRole);
+        item->setCheckState(Qt::Checked);
+        widget.tableWidget_clouds->setItem(i, 0, item);
+        
+            //pcl::io::savePCDFileASCII ("prueba.pcd", *pointCloud);
+        }
+        
+            widget.comboBox1->addItems(listClouds);
+    widget.comboBox2->addItems(listClouds);
+        cout << "tiempo: " << timer.stop() << " ms" << endl;       
+        
+            widget.tableWidget_clouds->resizeColumnsToContents();
+    widget.lineEdit_total->setText(QString::fromStdString(boost::lexical_cast<std::string>(clouds)));
+        /*
+            cout << "puntos: " << pointCloud->points.size() << endl;
+            pclClouds["test_RGB_0"] = pointCloud;
+            pclClouds["test_RGB_1"] = pointCloud;
+            QStringList clouds;
+            clouds.append(QString::fromStdString("test_RGB_0"));
+            clouds.append(QString::fromStdString("test_RGB_1"));
+     widget.comboBox1->addItems(clouds);
+    widget.comboBox2->addItems(clouds); 
+    shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud(pointCloud));
+    viewers[2]->unselectables.insert(viewers[2]->unselectables.end(),cloudNearest2);
+    viewers[2]->updateGL();*/
+    }
+    /*
     QDir dir(QString::fromStdString(path));
     dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
 
@@ -518,6 +926,7 @@ void Guetta::loadClouds(string path)
     QFileInfoList list = dir.entryInfoList();
     int max = widget.lineEdit_maxNubes->text().toInt();
     
+    QStringList clouds;
     int numClouds = 0;
     for (int i = 0; i < list.size() && numClouds < max; i += 1) 
     {
@@ -533,11 +942,16 @@ void Guetta::loadClouds(string path)
         item->data(Qt::CheckStateRole);
         item->setCheckState(Qt::Checked);
         widget.tableWidget_clouds->setItem(numClouds, 0, item);
-        
+        //widget.comboBox1->addItems(clouds);
+
+        clouds.append(QString::fromStdString(name));
         numClouds++;
     }
+    widget.comboBox1->addItems(clouds);
+    widget.comboBox2->addItems(clouds);
     widget.tableWidget_clouds->resizeColumnsToContents();
     widget.lineEdit_total->setText(QString::fromStdString(boost::lexical_cast<std::string>(numClouds)));
+     */
 }
 
 void Guetta::loadClouds()

@@ -3,7 +3,7 @@
 
 #include "Ramsac.h"
 
-Ramsac::Ramsac(GuettaCloud* guettaCloud1, GuettaCloud* guettaCloud2)
+Ramsac::Ramsac(shared_ptr<GuettaCloud> guettaCloud1, shared_ptr<GuettaCloud> guettaCloud2)
 {
     this->guettaCloud1 = guettaCloud1;
     this->guettaCloud2 = guettaCloud2;
@@ -11,7 +11,7 @@ Ramsac::Ramsac(GuettaCloud* guettaCloud1, GuettaCloud* guettaCloud2)
     menorDistancia = 999;
 }
 
-float Ramsac::getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGuettaCloud1,GuettaCloud* guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado, Eigen::Matrix4f& transformation_matrix)
+float Ramsac::getDistanciaTotal(shared_ptr<GuettaCloud> guettaCloud1, vector<int> indicesGuettaCloud1,shared_ptr<GuettaCloud> guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado, Eigen::Matrix4f& transformation_matrix)
 {
 
     estimateRigidTransformationSVD(*guettaCloud1->getPointCloud(), indicesGuettaCloud1, *guettaCloud2->getPointCloud(), indicesGuettaCloud2, transformation_matrix);   
@@ -27,7 +27,8 @@ float Ramsac::getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGu
     for(int i = 0; i < cloud3->points.size(); i++)
     {
         PointXYZRGB point = cloud3->points[i];
-        resultado->data[i] = new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b,NULL);
+        shared_array<float> descriptor;
+        resultado->data[i] = shared_ptr<GuettaKeyPoint>(new GuettaKeyPoint(point.x,point.y,point.z,point.r,point.g,point.b,descriptor));
         
     }
     
@@ -35,8 +36,8 @@ float Ramsac::getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGu
     // Calculamos la distancia entre los descriptores
     for(int i = 0; i < indicesGuettaCloud1.size(); i++)
     {
-        GuettaKeyPoint* p1 = guettaCloud2->data[indicesGuettaCloud1[i]];
-        GuettaKeyPoint* p2 = resultado->data[indicesGuettaCloud1[i]];
+        shared_ptr<GuettaKeyPoint> p1 = guettaCloud2->data[indicesGuettaCloud1[i]];
+        shared_ptr<GuettaKeyPoint> p2 = resultado->data[indicesGuettaCloud1[i]];
         float aux = p1->distanceXYZ(p2);
         distancia += aux;
        // cout << "Distancia: " << aux << endl;
@@ -53,7 +54,7 @@ void Ramsac::compute(int indice, string combinacion)
     //{
         
         
-        if(combinacion.length() >= 6)
+        if(combinacion.length() >= 9)
         {
             // Calculamos
 
@@ -65,9 +66,9 @@ void Ramsac::compute(int indice, string combinacion)
                 Eigen::Matrix4f transformation_matrix;
                 float distancia = getDistanciaTotal(guettaCloud2, indices, guettaCloud1, indices, resultado, transformation_matrix);
                 //cout << indice << " [" << combinacion << "] -> " << distancia << endl;
-                if(distancia < menorDistancia)
+                if(distancia < menorDistancia || distancia < 0.01)
                 {
-                  //  cout << "MENOR: " << indice << " [" << combinacion << "] -> " << distancia << endl;
+                    //cout << "MENOR: " << indice << " [" << combinacion << "] -> " << distancia << endl;
                     transformacion = transformation_matrix;
                     menorDistancia = distancia;
                     mejorCombinacion = indices;

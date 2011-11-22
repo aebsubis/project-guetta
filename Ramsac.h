@@ -22,22 +22,24 @@ using namespace std;
 #include "pcl/sample_consensus/ransac.h"
 #include "pcl/sample_consensus/sac_model_registration.h"
 #include "GuettaTime.h"
+#include <boost/shared_ptr.hpp>
+
 using namespace pcl;
 using namespace boost;
 class Ramsac
 {
     public:
-        Ramsac(GuettaCloud* guettaCloud1, GuettaCloud* guettaCloud2);
+        Ramsac(shared_ptr<GuettaCloud> guettaCloud1,shared_ptr<GuettaCloud> guettaCloud2);
         void compute(int indice, string combinacion);
-        float getDistanciaTotal(GuettaCloud* guettaCloud1, vector<int> indicesGuettaCloud1,GuettaCloud* guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado, Eigen::Matrix4f& transformation_matrix);
+        float getDistanciaTotal(shared_ptr<GuettaCloud> guettaCloud1, vector<int> indicesGuettaCloud1,shared_ptr<GuettaCloud> guettaCloud2, vector<int> indicesGuettaCloud2, GuettaCloud* resultado, Eigen::Matrix4f& transformation_matrix);
         int SplitString(const string& input, const string& delimiter, vector<string>& results, bool includeEmpties);
         void split(const string& str, const string& delimiters , vector<int>& tokens);
                vector<int> mejorCombinacion;
         float menorDistancia;
         Eigen::Matrix4f transformacion;
 private:
-        GuettaCloud* guettaCloud1;
-        GuettaCloud* guettaCloud2;
+        shared_ptr<GuettaCloud> guettaCloud1;
+        shared_ptr<GuettaCloud> guettaCloud2;
         int numPoints;
 
 };

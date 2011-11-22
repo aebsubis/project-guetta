@@ -5,7 +5,7 @@ OBJS  =	csparse_helper.o
 APPS  = hogman2d hogman3d
 
 
-CPPFLAGS += -D"_MY_CAST_=reinterpret_cast"
+
 
 #this is for safe type checking
 #CPPFLAGS += -D"_MY_CAST_=dynamic_cast"

@@ -26,30 +26,18 @@ using namespace cv;
 using namespace pcl::io;
 class GuettaFeatures
 {
-        public:
-            ~GuettaFeatures();
-            static GuettaFeatures* GetInstance();
-            static GuettaCloud* getNARFkeypoints(PointCloud<PointXYZRGB>::Ptr pointCloud, RGB color);
-            GuettaCloud* getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color);
-    
-GuettaCloud* getSURFkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color);
-            static RangeImage createRangeImage(PointCloud<PointXYZRGB>::Ptr cloud);
-            cv::Mat cargarImagen(string nombre);
+    public:
+        ~GuettaFeatures();
+        static GuettaFeatures* GetInstance();
+        static GuettaCloud* getNARFkeypoints(PointCloud<PointXYZRGB>::Ptr pointCloud, RGB color);
+        shared_ptr<GuettaCloud> getSIFTkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color);
+        GuettaCloud* getSURFkeypoints(PointCloud<PointXYZRGB>::Ptr cloud, string imagen, RGB color);
+        static RangeImage createRangeImage(PointCloud<PointXYZRGB>::Ptr cloud);
+        cv::Mat cargarImagen(string nombre);
 
-
-            
-        private:
-            GuettaFeatures();        
-            static GuettaFeatures* instance;
-            
-            
-            
-            
-            
-            
-    std::vector<cv::KeyPoint> feature_locations_2d_;
-    cv::Mat feature_descriptors_;
-    std::vector<Eigen::Vector4f, Eigen::aligned_allocator<Eigen::Vector4f> > feature_locations_3d_;          
+    private:
+        GuettaFeatures();        
+        static GuettaFeatures* instance;       
 
 };
 

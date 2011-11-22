@@ -19,14 +19,13 @@ class GuettaCloud
 {
     public:
         GuettaCloud();
-        GuettaCloud(vector<GuettaKeyPoint*> data);
+        GuettaCloud(vector<shared_ptr<GuettaKeyPoint> > data);
         GuettaCloud(PointCloud<PointXYZRGB>::Ptr cloud);
         GuettaCloud(const GuettaCloud& guettaCloud);
         ~GuettaCloud();
         GuettaCloud& operator=(const GuettaCloud& guettaCloud);
         PointCloud<PointXYZRGB>::Ptr getPointCloud();
-        vector<GuettaKeyPoint*> data;
-        string id;
+        vector<shared_ptr<GuettaKeyPoint> > data;
         PointCloud<PointXYZRGB>::Ptr pointCloud;
 };
 

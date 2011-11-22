@@ -29,16 +29,16 @@ class GuettaICP
             ~GuettaICP();
             static GuettaICP* GetInstance();
             // Especificamos la nube que el algoritmo transformará 
-            void setInputCloud(GuettaCloud* inputCloud);
+            void setInputCloud(shared_ptr<GuettaCloud> inputCloud);
             // Especificamos la nube que el algoritmo usará como objetivo 
-            void setInputTarget(GuettaCloud* inputTarget);
+            void setInputTarget(shared_ptr<GuettaCloud> inputTarget);
             GuettaCloud* compute(Eigen::Matrix4f& transformation_matrix, int maxKeyPointsAlineamiento, float maxDistance);
-            void getNearestDescriptors(int maxKeyPointsAlineamiento, float maxDistance, GuettaCloud* cloud1, GuettaCloud* cloud2);
+            void getNearestDescriptors(int maxKeyPointsAlineamiento, float maxDistance, shared_ptr<GuettaCloud> cloud1, shared_ptr<GuettaCloud> cloud2);
         private:
             GuettaICP();
             static GuettaICP* instance;
-            GuettaCloud* inputCloud;
-            GuettaCloud* inputTarget;
+            shared_ptr<GuettaCloud> inputCloud;
+            shared_ptr<GuettaCloud> inputTarget;
 };
 
 #endif

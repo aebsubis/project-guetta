@@ -17,29 +17,6 @@ Viewer::Viewer(QWidget* parent, int idViewport)
 
 Viewer::~Viewer()
 {
-    cout << "destructor viewer" << endl;
-    for(int i = 0; i < unselectables.size(); i++)
-    {
-        if(unselectables[i] != NULL)
-        {
-            delete unselectables[i];
-            unselectables[i] = NULL;
-        }
-    }
-    //unselectables.clear();
-    
-/*
-    cout << idViewport << " tam: " << selectables.size() << endl;
-    for(int i = 0; i < selectables.size(); i++)
-    {
-        if(selectables[i] != NULL)
-        {
-            delete selectables[i];
-            selectables[i] = NULL;
-        }
-    }
-    selectables.clear();
-  */  
 }
 
 void Viewer::drawKeyPoints(bool name)
@@ -48,10 +25,10 @@ void Viewer::drawKeyPoints(bool name)
     GLUquadricObj* quadratic = gluNewQuadric();    
     for(int j = 0; j < selectables.size(); j++)
     {
-        GuettaCloud* guettaCloud = selectables[j];
+        shared_ptr<GuettaCloud> guettaCloud = selectables[j];
         for(int i = 0; i < guettaCloud->data.size() ; i = i++)
         {
-            GuettaKeyPoint* point = guettaCloud->data[i];
+            shared_ptr<GuettaKeyPoint> point = guettaCloud->data[i];
             if( !( isnan(point->x) || isnan(point->y) || isnan(point->z)))
             {
                 glPushMatrix();
@@ -72,10 +49,10 @@ void Viewer::drawCloud(bool name)
     glRotatef(180,1,0,0); 
     for(int j = 0; j < unselectables.size(); j++)
     {
-        GuettaCloud* guettaCloud = unselectables[j];
+        shared_ptr<GuettaCloud> guettaCloud = unselectables[j];
         for(int i = 0; i < guettaCloud->data.size() ; i = i++)
         {
-            GuettaKeyPoint* point = guettaCloud->data[i];
+            shared_ptr<GuettaKeyPoint> point = guettaCloud->data[i];
             if( !( isnan(point->x) || isnan(point->y) || isnan(point->z)))
             {
                 glBegin(GL_POINTS);
@@ -108,7 +85,6 @@ void Viewer::drawWithNames()
 
 void Viewer::postSelection(const QPoint& point)
 {
-
   // Compute orig and dir, used to draw a representation of the intersecting line
   camera()->convertClickToLine(point, orig, dir);
 

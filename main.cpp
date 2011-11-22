@@ -15,7 +15,7 @@
 using namespace pcl;
 using namespace pcl::io;
 using namespace boost;
-#include "newForm.h"
+//#include "newForm.h"
 #include "Guetta.h"
 #include <X11/Xlib.h>
 #include <boost/shared_ptr.hpp>
@@ -24,10 +24,11 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     
-if (!XInitThreads()) {
-printf("Xlib not thread safe\n");
-exit(1);
-}
+    if (!XInitThreads()) {
+    printf("Xlib not thread safe\n");
+    exit(1);
+    }
+    
     QApplication app(argc, argv);
     setlocale(LC_NUMERIC,"C");
 
@@ -36,6 +37,7 @@ exit(1);
     
     
     return app.exec();
+    
     /*
     shared_ptr<int> ptr2(new int);
     *ptr2 = 10;
@@ -43,5 +45,7 @@ exit(1);
     
     vector<shared_ptr<int> > numeros;
     numeros.insert(numeros.end(),ptr2);*/
+    
+
 }
 
