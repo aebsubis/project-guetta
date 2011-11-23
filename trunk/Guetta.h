@@ -117,6 +117,8 @@ class Guetta : public QDialog
             int actualIndex;
             shared_ptr<GuettaCloud> cloudResultado;
             shared_ptr<GuettaCloud> featuresResultado;
+            shared_ptr<GuettaCloud> featuresResultadoLocal;
+            shared_ptr<GuettaCloud> cloudResultadoLocal;
             string nameCloudResultado;
 };      
 

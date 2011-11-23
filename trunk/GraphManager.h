@@ -29,6 +29,7 @@ class GraphManager
         void optimizeGraph();
         map<int,shared_ptr<Node> > graph;
         Eigen::Matrix4f getOptimizedTransformation(int idNode);
+        void printInformation(Eigen::Matrix4f transformation);
         bool update;
     private:
         
