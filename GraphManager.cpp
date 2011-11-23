@@ -65,7 +65,7 @@ void GraphManager::addNode(shared_ptr<Node> newNode)
             double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
             cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;  
     
-            if(ramsac.menorDistancia < 0.01 && fabs(yaw) < 30)
+            if(ramsac.menorDistancia < 0.1) // && fabs(yaw) < 30)
             {
                 /*
                 Eigen::Matrix4f transformation = ramsac.transformacion;
@@ -78,21 +78,39 @@ void GraphManager::addNode(shared_ptr<Node> newNode)
                 double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
                 cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;
                 cout << transformation << endl;*/
-                cout << "Encontrado loop: nodos: " << newNode->getId() << " y " << node->getId() << endl;
-                cout << "Creando arista entre ambos nodos" << endl;
+                
+                
                 AIS::LoadedEdge3D edge;
                 edge.id1 = node->getId();
                 edge.id2 = newNode->getId();
+                cout << "-----------------------------------------" << endl;
+                cout << "TRANSFORMACION" << endl;
                 edge.mean = eigen2Hogman(ramsac.transformacion);
+                //edge.mean = eigen2Hogman(newNode-);
+                //edge.mean = eigen2Hogman(newNode->transformation);
+                cout << ramsac.transformacion << endl;
+                printInformation(ramsac.transformacion);
+                cout << "-----------------------------------------" << endl;
                 edge.informationMatrix = Matrix6::eye(32);
+                
                 if(abs(newNode->getId()-node->getId()) == 1)
-                        addEdgeToHogman(edge,true);
-                if(abs(newNode->getId()-node->getId()) > 8)
                 {
+                    cout << "Creando arista entre ambos nodos" << endl;
+                        addEdgeToHogman(edge,true);
+                        
+                }
+                if(abs(newNode->getId()-node->getId()) > 10)
+                {
+                    cout << "Encontrado loop: nodos: " << newNode->getId() << " y " << node->getId() << endl;
                      addEdgeToHogman(edge,true);
                         update = true;
                         
                 }
+                /*
+                addEdgeToHogman(edge,true);
+                if(abs(newNode->getId()-node->getId()) > 8)
+                        update = true;           
+                */
                 //break;
                 //edge.mean = 
                 /*
@@ -127,6 +145,19 @@ void GraphManager::addNode(shared_ptr<Node> newNode)
         if(update == true)
             optimizeGraph();
     }
+}
+
+
+void GraphManager::printInformation(Eigen::Matrix4f transformation)
+{
+    double roll = atan2(transformation(2,1),transformation(2,2));
+    double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
+    double yaw = atan2(transformation(1,0),transformation(0,0));
+    roll = roll/M_PI*180;
+    pitch = pitch/M_PI*180;
+    yaw = yaw/M_PI*180;
+    double dist = sqrt(transformation(0,3)*transformation(0,3)+transformation(1,3)*transformation(1,3)+transformation(2,3)*transformation(2,3));
+    cout << roll << ";" << pitch << ";" << yaw << ";" << dist << endl;    
 }
 
 void GraphManager::mostrarInformacion()

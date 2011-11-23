@@ -20,12 +20,12 @@ class Node
         int matchNodePair(shared_ptr<Node> node);
         shared_ptr<GuettaCloud> getFeatures();
         shared_ptr<GuettaCloud> getCloud();
-        
+        Eigen::Matrix4f transformation;
     private:
         shared_ptr<GuettaCloud> cloud;
         shared_ptr<GuettaCloud> keyPoints;
         shared_ptr<GuettaCloud> features;
-        Eigen::Matrix4f transformation;
+        
         int id;
 };
 

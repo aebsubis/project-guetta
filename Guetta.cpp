@@ -227,7 +227,7 @@ void Guetta::siguiente()
             features2 = GuettaFeatures::GetInstance()->getSIFTkeypoints(pclClouds[nameCloud2],prefijo+nameCloud2,RGB(0,1,0));
 
             shared_ptr<Node> node (new Node(cloud1,cloud1,features1));
-            
+
             grapManager->addNode(node);
              viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),features1);
             // viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloud1);
@@ -246,7 +246,7 @@ void Guetta::siguiente()
         shared_ptr<GuettaCloud> cloudNearest1 (new GuettaCloud());
         shared_ptr<GuettaCloud> cloudNearest2 (new GuettaCloud());
         Eigen::Matrix4f transformation = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);
-        cout << "transformacion guetta: " << endl;
+        cout << "transformacion guetta global: " << endl;
         cout << transformation << endl;
     double roll = atan2(transformation(2,1),transformation(2,2));
     double pitch = atan2(-transformation(2,0),sqrt(transformation(2,1)*transformation(2,1)+transformation(2,2)*transformation(2,2)));
@@ -259,12 +259,30 @@ void Guetta::siguiente()
     
         cloudResultado = transform(cloud2, transformation);
         featuresResultado = transform(features2, transformation);
+        
         shared_ptr<GuettaCloud> cloudNearest2Transformed = transform(cloudNearest2, transformation);
         nameCloudResultado = nameCloud2;
+        
+        
+        if(actualIndex > 1)
+        {
+            // Calculamos la transformacion a partir de las ultimas dos imagenes
+            features1 = featuresResultadoLocal;
+            cloud1 = cloudResultadoLocal;
+        }
+        cloudNearest1 = shared_ptr<GuettaCloud> (new GuettaCloud());
+        cloudNearest2 = shared_ptr<GuettaCloud> (new GuettaCloud());
+        
+        Eigen::Matrix4f transformationLocal = emparejar(true,features1,features2,cloudNearest1,cloudNearest2);   
+        
+        cout << "transformacion guetta local: " << endl;
+        cout << transformationLocal << endl;
         
         shared_ptr<Node> node (new Node(cloud2,cloudNearest2Transformed,features2,transformation));
         grapManager->addNode(node);
         
+        cloudResultadoLocal = cloud2;
+        featuresResultadoLocal = features2;
         //viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),featuresResultado);
         //viewers[5]->unselectables.insert(viewers[5]->unselectables.end(),cloudResultado);
         
@@ -838,7 +856,7 @@ void Guetta::loadClouds(string path)
         GuettaTime timer;
         timer.start();
         QStringList listClouds;
-        int clouds = 30;//16; //23;
+        int clouds = 14;//16; //23;
         
         for(int i = 0; i < clouds; i++)
         {
