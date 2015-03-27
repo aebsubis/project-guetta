@@ -1,0 +1,1 @@
+Reconstruction of real environments in three dimensions through the use of the device kinect.
