@@ -3,11 +3,9 @@
 ## Description
 FINAL THESIS project at [University of Alicante](http://www.ua.es/).
 
-Simultaneous Location and Mapping (SLAM) using a low cost 3D camera (Kinect), Point Cloud Library (PCL), OpenCV, Robot Operating Sytem (ROS), and Tree-based netwORk Optimizer (TORO). It uses an optical flow to detect movement and implements a simple navigation algorithm.
+Innovative system for automatic map building and [Simultaneous Localization and Mapping](https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping) (SLAM) using a Kinect, low cost 3D camera. The method uses [optical flow](https://en.wikipedia.org/wiki/Optical_flow) to detect movement. If so, some visual features are processed. This process applies acceptance criteria to discriminate the visual features and use only the ones that provide useful information. At the next step the [egomotion](https://en.wikipedia.org/wiki/Visual_odometry) is calculated based on the visual features obtained. Finally it moves using a simple navigation algorithm that avoids obstacles.
 
-Innovative system for automatic map building and [Simultaneous Localization and Mapping](https://en.wikipedia.org/wiki/Simultaneous_localization_and_mapping) (SLAM) using a Kinect, low cost 3D camera. The method uses [optical flow](https://en.wikipedia.org/wiki/Optical_flow) in order to determine if the robot has done a movement. If so, some visual features which do not accomplish several criteria are deleted, and then the [egomotion](https://en.wikipedia.org/wiki/Visual_odometry) is calculated. 
-
-We use a [tree-based network optimizer](https://www.openslam.org/toro.html) (TORO) in order to rectify the map and solve the SLAM problem. The proposed method provides better efficiency that others. Additionaly, a study of different visual detectors and descriptors have been done in order to identify which of them are more suitable for the SLAM problem.
+We use [Point Cloud Library](http://pointclouds.org/) (PCL), [OpenCV](http://opencv.org/),  [Robot Operating Sytem](http://www.ros.org/) (ROS) and a [Tree-based netwORk Optimizer](https://www.openslam.org/toro.html) (TORO) in order to rectify the map and solve the SLAM problem. The proposed method provides better efficiency that others. Additionaly, a study of different visual detectors and descriptors have been done in order to identify which of them are more suitable for the SLAM problem.
 
 ![Map rectification](http://www.pinkzero.com/dpfportfolio/works/images/finalthesis1.png)
 ![3D detectors](http://www.pinkzero.com/dpfportfolio/works/images/finalthesis2.png)
